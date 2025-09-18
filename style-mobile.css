@@ -1,0 +1,42 @@
+@media (max-width: 480px) {
+
+    header.frame-container,
+    footer.frame-container {
+        padding: 10px;
+    }
+
+    .frame-container {
+        border-width: 10px;
+        border-image-width: 10px;
+        width: 95%;
+        max-width: none;
+        padding: 10px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .navbar-ul {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+article.frame-container {
+    width: 95%;
+    padding: 8px;
+    font-size: 0.85rem;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+
+    #marco-global select {
+        width: 100%;
+        max-width: 200px;
+    }
+
+    .site-credit {
+        font-size: 0.75rem;
+    }
+}
+
