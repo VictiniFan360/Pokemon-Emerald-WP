@@ -1,6 +1,7 @@
 </main>
 
 <footer class="frame-container" id="marco-footer">
+
     <p>&copy; <?php echo date('Y'); ?> <?php bloginfo('name'); ?> - <?php echo esc_html(get_theme_mod('pokemon_footer_text', 'Todos los derechos reservados')); ?></p>
 
     <div id="marco-global">
@@ -39,6 +40,17 @@
         <?php endif; ?>
     </div>
 
+    <div class="footer-navs">
+        <h4>Páginas</h4>
+        <ul><?php wp_list_pages(); ?></ul>
+
+        <h4>Archivos</h4>
+        <ul><?php wp_get_archives(); ?></ul>
+
+        <h4>Categorías</h4>
+        <ul><?php wp_list_categories(array('title_li' => '')); ?></ul>
+    </div>
+
     <div class="site-credit">
         Tema Pokémemerald by Alejo
         <br>
@@ -46,15 +58,9 @@
         <a href="https://fontstruct.com/fontstructions/show/1975556" target="_blank">aztecwarrior28</a>, 
         licenciada bajo <a href="http://creativecommons.org/licenses/by-sa/3.0/" target="_blank">CC BY-SA 3.0</a>.
     </div>
+
 </footer>
 
 <?php wp_footer(); ?>
 </body>
 </html>
-
-
-
-
-
-
-
