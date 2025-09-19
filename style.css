@@ -1,17 +1,52 @@
 /*
-Theme Name: Pokémemerald Theme
+Theme Name: Pokémerald Theme
 Theme URI: https://emerald.alejofernandez.es.ht
 Author: Alejo Fernández
 Author URI: https://emerald.alejofernandez.es.ht
-Description: Tema con tipografía Pokémon Emerald y marcos personalizables para NavBar, Footer y contenido.
-Version: 1.0
+Description: Tema con tipografía Pokémon Emerald, marcos personalizables, navbar, sidebar y widgets en footer.
+Version: 1.2
 License: GPLv2 or later
 Text Domain: pokemon-theme
 */
+
 body {
     margin: 0;
     padding: 0;
     font-family: 'pokemon_emeraldregular', sans-serif;
+}
+
+/* Layout principal */
+.content-area {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.main-content {
+    flex: 3;
+}
+
+.sidebar {
+    flex: 1;
+    max-width: 300px;
+}
+
+.sidebar-widget {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    background: #fafafa;
+}
+
+.sidebar-widget-title {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    color: #333;
 }
 
 .frame-container {
@@ -25,8 +60,7 @@ body {
     border-image-outset: 0;
     background-color: #f8f8f8;
     max-width: 800px;
-    width: 90%;
-    box-sizing: border-box;
+    width: 100%;
 }
 
 header.frame-container,
@@ -45,18 +79,6 @@ article.frame-container {
     font-size: 0.95rem;
     line-height: 1.4;
     text-align: center;
-}
-
-article.frame-container * {
-    text-align: inherit;
-}
-
-
-
-
-article.frame-container h2 {
-    font-size: 1.4rem;
-    margin-bottom: 10px;
 }
 
 .navbar-ul {
@@ -104,4 +126,27 @@ article.frame-container h2 {
     color: #555;
     margin-top: 10px;
     font-style: italic;
+}
+
+.sidebar .frame-container {
+    margin: 20px auto;
+    padding: 15px;
+    max-width: 300px;
+    background-color: #f8f8f8;
+    border: 30px solid transparent;
+    border-image-slice: 15;
+    border-image-width: 30px;
+    border-image-repeat: repeat;
+    box-sizing: border-box;
+}
+
+.sidebar .frame-container h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.sidebar .frame-container ul {
+    list-style: disc;
+    padding-left: 20px;
 }

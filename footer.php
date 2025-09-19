@@ -1,7 +1,7 @@
 </main>
 
 <footer class="frame-container" id="marco-footer">
-    <p>&copy; <?php echo date('Y'); ?> <?php bloginfo('name'); ?> - Todos los derechos reservados.</p>
+    <p>&copy; <?php echo date('Y'); ?> <?php bloginfo('name'); ?> - <?php echo esc_html(get_theme_mod('pokemon_footer_text', 'Todos los derechos reservados')); ?></p>
 
     <div id="marco-global">
         <p>Cambiar Marco de todo el sitio:</p>
@@ -40,7 +40,7 @@
     </div>
 
     <div class="site-credit">
-        Tema Pokémemeral by Alejo
+        Tema Pokémemerald by Alejo
         <br>
         Tipografía <em>Pokémon Emerald</em> por 
         <a href="https://fontstruct.com/fontstructions/show/1975556" target="_blank">aztecwarrior28</a>, 
