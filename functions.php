@@ -1,6 +1,6 @@
 <?php
 /*
-Theme Name: Pokémemerald Theme
+Theme Name: Pokémerald Theme
 Theme URI: https://emerald.alejofernandez.es.ht
 Author: Alejo Fernández
 Author URI: https://emerald.alejofernandez.es.ht
