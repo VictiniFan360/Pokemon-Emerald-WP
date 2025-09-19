@@ -280,4 +280,9 @@ footer.frame-container {
     margin-top: 20px;
 }
 
+.pagination.frame-container {
+    border: none;
+    padding: 0;
+    background: none;
+}
 

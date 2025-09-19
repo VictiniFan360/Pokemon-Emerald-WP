@@ -4,7 +4,8 @@
 
     <p>&copy; <?php echo date('Y'); ?> <?php bloginfo('name'); ?> - <?php echo esc_html(get_theme_mod('pokemon_footer_text', 'Todos los derechos reservados')); ?></p>
 
-    <div id="marco-global">
+    <!-- Marco global -->
+    <div id="marco-global" style="margin-top:15px;">
         <p>Cambiar Marco de todo el sitio:</p>
         <label for="frameSelectGlobal">Marco/Ventana:</label>
         <select id="frameSelectGlobal">
@@ -14,6 +15,7 @@
         </select>
     </div>
 
+    <!-- Personalizar tipografía -->
     <details style="margin-top:20px;">
         <summary>Personalizar Tipografía</summary>
         <div style="margin-top:10px;">
@@ -34,13 +36,15 @@
         </div>
     </details>
 
-    <div class="footer-widgets">
+    <!-- Widgets del footer -->
+    <div class="footer-widgets" style="margin-top:20px;">
         <?php if (is_active_sidebar('footer-widget-area')) : ?>
             <?php dynamic_sidebar('footer-widget-area'); ?>
         <?php endif; ?>
     </div>
 
-    <div class="footer-navs">
+    <!-- Páginas / Archivos / Categorías -->
+    <div class="footer-navs" style="margin-top:20px;">
         <h4>Páginas</h4>
         <ul><?php wp_list_pages(); ?></ul>
 
@@ -51,7 +55,8 @@
         <ul><?php wp_list_categories(array('title_li' => '')); ?></ul>
     </div>
 
-    <div class="site-credit">
+    <!-- Créditos -->
+    <div class="site-credit" style="margin-top:20px;">
         Tema Pokémemerald by Alejo
         <br>
         Tipografía <em>Pokémon Emerald</em> por 
