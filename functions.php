@@ -1,7 +1,7 @@
 <?php
 /*
 Theme Name: Pokémerald Theme
-Theme URI: https://emerald.alejofernandez.es.ht
+Theme URI: https://wpemerald.webs.nf
 Author: Alejo Fernández
 Author URI: https://alejofernandez.es.ht
 Description: Tema con tipografía Pokémon Emerald y marcos personalizables para NavBar, Footer y contenido.
