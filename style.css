@@ -4,7 +4,7 @@ Theme URI: https://emerald.alejofernandez.es.ht
 Author: Alejo Fernández
 Author URI: https://emerald.alejofernandez.es.ht
 Description: Tema con tipografía Pokémon Emerald, marcos personalizables, navbar, sidebar y widgets en footer.
-Version: 1.3
+Version: 1.4
 License: GPLv2 or later
 Text Domain: pokemon-theme
 */
@@ -49,6 +49,9 @@ body {
     color: #333;
 }
 
+/* Marcos */
+/* Frame container general */
+/* Frame container general con imagen de borde */
 .frame-container {
     display: block;
     padding: 20px;
@@ -58,10 +61,28 @@ body {
     border-image-repeat: repeat repeat;
     border-image-width: 30px;
     border-image-outset: 0;
-    background-color: #f8f8f8;
+    background-color: <?php echo esc_attr(get_theme_mod('pokemon_bg_color', '#f8f8f8')); ?>;
     max-width: 800px;
-    width: 100%;
+    width: 90%;
+    box-sizing: border-box;
 }
+
+
+/* Artículos dentro de main */
+article.frame-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 20px auto;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    text-align: left;
+}
+
+article.frame-container * {
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
 
 header.frame-container,
 footer.frame-container {
@@ -81,6 +102,7 @@ article.frame-container {
     text-align: center;
 }
 
+/* Navbar */
 .navbar-ul {
     list-style: none;
     display: flex;
@@ -115,11 +137,13 @@ article.frame-container {
     color: #ffcb05;
 }
 
+/* Marco Global */
 #marco-global {
     text-align: center;
     margin-top: 15px;
 }
 
+/* Créditos */
 .site-credit {
     text-align: center;
     font-size: 0.85rem;
@@ -128,6 +152,7 @@ article.frame-container {
     font-style: italic;
 }
 
+/* Sidebar */
 .sidebar .frame-container {
     margin: 20px auto;
     padding: 15px;
@@ -151,6 +176,7 @@ article.frame-container {
     padding-left: 20px;
 }
 
+/* Área de contenido */
 .content-area {
     display: flex;
     gap: 20px;
@@ -174,16 +200,8 @@ article.frame-container {
     margin-bottom: 20px;
 }
 
-@media (max-width: 768px) {
-    .content-area {
-        flex-direction: column;
-    }
-    .main-content, .sidebar {
-        max-width: 100%;
-        flex: 1 1 100%;
-    }
-}
 
+/* Contenido */
 .content-area {
     margin: 20px auto;
     max-width: 800px;
@@ -195,6 +213,7 @@ article.frame-container {
     margin-bottom: 20px;
 }
 
+/* Footer Navs */
 .footer-navs {
     display: flex;
     flex-wrap: wrap;
@@ -212,13 +231,14 @@ article.frame-container {
     margin: 20px auto;
     max-width: 800px;
 }
-/
+
 .frame-container {
     display: block;
     padding: 20px;
     margin-bottom: 20px;
 }
 
+/* Footer Navs (listas) */
 .footer-navs {
     text-align: center;
     margin-top: 20px;
@@ -235,34 +255,7 @@ article.frame-container {
     margin-bottom: 5px;
 }
 
-
-header.frame-container {
-    padding: 40px 20px; 
-    text-align: center;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-header.frame-container .site-title {
-    font-size: 2.2rem;
-    margin-bottom: 10px;
-}
-
-header.frame-container {
-    width: 90%;
-    max-width: 1400px;
-    margin: 0 auto;
-    text-align: center;
-    box-sizing: border-box;
-    padding: 20px;
-}
-
-header.frame-container .navbar-ul {
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 20px;
-}
-
+/* Footer */
 footer.frame-container {
     width: 90%;
     max-width: 1400px;
@@ -280,9 +273,33 @@ footer.frame-container {
     margin-top: 20px;
 }
 
+/* Paginación */
 .pagination.frame-container {
     border: none;
     padding: 0;
     background: none;
 }
 
+.screen-reader-text {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+.read-more {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 5px 12px;
+    background-color: #ffcb05;
+    color: #111;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+}
+
+.read-more:hover {
+    background-color: #e0b800;
+}

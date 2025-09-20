@@ -5,10 +5,22 @@ Theme URI: https://emerald.alejofernandez.es.ht
 Author: Alejo Fernández
 Author URI: https://emerald.alejofernandez.es.ht
 Description: Tema con tipografía Pokémon Emerald y marcos personalizables para NavBar, Footer y contenido.
-Version: 1.3
+Version: 1.4
 License: GPLv2 or later
 Text Domain: pokemon-theme
 */
+
+// Soporte para logo personalizado
+function pokemon_theme_setup() {
+    add_theme_support('custom-logo', array(
+        'height' => 100,
+        'width' => 400,
+        'flex-height' => true,
+        'flex-width' => true,
+        'header-text' => array('site-title', 'site-description'),
+    ));
+}
+add_action('after_setup_theme', 'pokemon_theme_setup');
 
 // Registrar menús
 function pokemon_register_menus() {
@@ -183,19 +195,20 @@ function pokemon_customize_css() {
 
         .frame-container {
             border-image-source: url("<?php echo get_template_directory_uri(); ?>/img/frame_<?php echo absint(get_theme_mod('pokemon_default_frame', 1)); ?>.png");
+            display: block;
+            padding: 20px;
+            margin: 20px auto;
+            border: 30px solid transparent;
+            border-image-slice: 15;
+            border-image-repeat: repeat repeat;
+            border-image-width: 30px;
+            border-image-outset: 0;
+            background-color: #f8f8f8;
+            max-width: 800px;
+            width: 90%;
+            box-sizing: border-box;
         }
     </style>
     <?php
 }
 add_action('wp_head', 'pokemon_customize_css');
-
-
-
-
-
-
-
-
-
-
-

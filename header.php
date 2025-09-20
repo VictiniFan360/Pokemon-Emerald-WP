@@ -6,11 +6,11 @@
     <?php wp_head(); ?>
     <style>
         body {
-            background-color: <?php echo esc_attr(get_theme_mod('pokemon_custom_bg', '#8890f8')); ?>;
+            background-color: <?php echo esc_attr(get_theme_mod('pokemon_bg_color', '#8890f8')); ?>;
             font-family: <?php echo esc_attr(get_theme_mod('pokemon_default_font', "'pokemon_emeraldregular', sans-serif")); ?>;
         }
 
-        /* Estilos del skip link */
+        /* Skip link */
         .skip-link {
             position: absolute;
             top: -40px;
@@ -26,6 +26,113 @@
         .skip-link:focus {
             top: 10px;
         }
+
+        /* Screen reader text */
+        .screen-reader-text {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            overflow: hidden;
+            clip: rect(0,0,0,0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        header.frame-container {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+
+        .site-branding {
+            text-align: center;
+        }
+
+        .navbar-ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 0;
+            padding: 0;
+            align-items: center;
+        }
+
+        .navbar-ul li {
+            position: relative;
+            padding-left: 18px;
+        }
+
+        .navbar-ul li::before {
+            content: "▶";
+            position: absolute;
+            left: 0;
+            color: #ffcb05;
+            font-size: 0.9rem;
+        }
+
+        .navbar-ul a {
+            text-decoration: none;
+            color: #111;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .navbar-ul a:hover {
+            color: #ffcb05;
+        }
+
+        .navbar-search {
+            margin-left: 20px;
+        }
+
+        .navbar-search input[type="search"] {
+            padding: 5px 8px;
+            font-size: 0.9rem;
+        }
+
+        .navbar-search button {
+            padding: 5px 10px;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-inner {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+            .navbar-ul {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .navbar-search {
+                margin-left: 0;
+                margin-top: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-inner {
+                padding: 0 10px;
+            }
+        }
     </style>
 </head>
 <body <?php body_class(); ?>>
@@ -33,17 +140,20 @@
 <a href="#main-content" class="skip-link"><?php esc_html_e('Saltar al contenido principal', 'pokemon-theme'); ?></a>
 
 <header class="frame-container">
-    <div class="header-inner" style="text-align:center;">
-        <h1 class="site-title"><?php bloginfo('name'); ?></h1>
-        <p class="site-description"><?php bloginfo('description'); ?></p>
-        
+    <div class="header-inner">
+
         <?php if (has_custom_logo()) : ?>
             <div class="site-logo">
                 <?php the_custom_logo(); ?>
             </div>
         <?php endif; ?>
 
-        <nav class="navbar">
+        <div class="site-branding">
+            <h1 class="site-title"><?php bloginfo('name'); ?></h1>
+            <p class="site-description"><?php bloginfo('description'); ?></p>
+        </div>
+
+        <nav class="navbar" role="navigation">
             <ul class="navbar-ul">
                 <?php
                 if (has_nav_menu('header-menu')) {
@@ -57,24 +167,17 @@
                     <li><a href="<?php echo home_url(); ?>">Inicio</a></li>
                 <?php } ?>
             </ul>
+
+            <div class="navbar-search">
+                <form role="search" method="get" class="search-form" action="<?php echo esc_url(home_url('/')); ?>">
+                    <label class="screen-reader-text" for="header-search-field"><?php esc_html_e('Buscar en el sitio:', 'pokemon-theme'); ?></label>
+                    <input type="search" id="header-search-field" class="search-field" placeholder="<?php esc_attr_e('Buscar…', 'pokemon-theme'); ?>" value="<?php echo get_search_query(); ?>" name="s" />
+                    <button type="submit" class="search-submit"><?php esc_html_e('Buscar', 'pokemon-theme'); ?></button>
+                </form>
+            </div>
         </nav>
+
     </div>
 </header>
 
-<div id="theme-search-container" class="frame-container" style="display:none; text-align:center; margin:10px auto; max-width:400px;">
-    <form role="search" method="get" class="search-form" action="<?php echo home_url('/'); ?>">
-        <label>
-            <input type="search" class="search-field" placeholder="<?php esc_attr_e('Buscar…', 'pokemon-theme'); ?>" value="<?php echo get_search_query(); ?>" name="s" />
-        </label>
-        <button type="submit" class="search-submit"><?php esc_html_e('Buscar', 'pokemon-theme'); ?></button>
-    </form>
-</div>
-
 <main id="main-content" class="content-area">
-
-
-
-
-
-
-

@@ -57,7 +57,7 @@
 
     <!-- Créditos -->
     <div class="site-credit" style="margin-top:20px;">
-        Tema Pokémemerald by Alejo
+        Tema Pokémerald by Alejo
         <br>
         Tipografía <em>Pokémon Emerald</em> por 
         <a href="https://fontstruct.com/fontstructions/show/1975556" target="_blank">aztecwarrior28</a>, 
@@ -65,6 +65,61 @@
     </div>
 
 </footer>
+
+<!-- Script para recordar ajustes de marco y tipografía en todo el sitio -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const frameSelect = document.getElementById('frameSelectGlobal');
+    const fontSelect = document.getElementById('fontSelect');
+    const fontColor = document.getElementById('fontColor');
+    const fontItalic = document.getElementById('fontItalic');
+    const body = document.body;
+
+    function applyFrame(frameNumber) {
+        document.querySelectorAll('.frame-container').forEach(el => {
+            el.style.borderImageSource = `url('<?php echo get_template_directory_uri(); ?>/img/frame_${frameNumber}.png')`;
+        });
+    }
+
+    // --- Cargar ajustes guardados ---
+    const savedFrame = localStorage.getItem('pokemonFrame') || frameSelect.value;
+    applyFrame(savedFrame);
+    frameSelect.value = savedFrame;
+
+    const savedFont = localStorage.getItem('pokemonFont') || fontSelect.value;
+    body.style.fontFamily = savedFont;
+    fontSelect.value = savedFont;
+
+    const savedColor = localStorage.getItem('pokemonFontColor') || fontColor.value;
+    body.style.color = savedColor;
+    fontColor.value = savedColor;
+
+    const savedItalic = localStorage.getItem('pokemonFontItalic') === 'true';
+    body.style.fontStyle = savedItalic ? 'italic' : 'normal';
+    fontItalic.checked = savedItalic;
+
+    // --- Escuchar cambios ---
+    frameSelect.addEventListener('change', function() {
+        applyFrame(this.value);
+        localStorage.setItem('pokemonFrame', this.value);
+    });
+
+    fontSelect.addEventListener('change', function() {
+        body.style.fontFamily = this.value;
+        localStorage.setItem('pokemonFont', this.value);
+    });
+
+    fontColor.addEventListener('input', function() {
+        body.style.color = this.value;
+        localStorage.setItem('pokemonFontColor', this.value);
+    });
+
+    fontItalic.addEventListener('change', function() {
+        body.style.fontStyle = this.checked ? 'italic' : 'normal';
+        localStorage.setItem('pokemonFontItalic', this.checked);
+    });
+});
+</script>
 
 <?php wp_footer(); ?>
 </body>
