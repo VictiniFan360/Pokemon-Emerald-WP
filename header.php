@@ -3,6 +3,28 @@
 <head>
     <meta charset="<?php bloginfo('charset'); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <?php
+    if (!function_exists('_wp_render_title_tag')) {
+        function pokemon_custom_title() {
+            echo '<title>';
+            if (is_home() || is_front_page()) {
+                bloginfo('name');
+            } elseif (is_single() || is_page()) {
+                wp_title('|', true, 'right');
+                bloginfo('name');
+            } elseif (is_archive()) {
+                wp_title('', true, 'right');
+                bloginfo('name');
+            } else {
+                bloginfo('name');
+            }
+            echo '</title>';
+        }
+        add_action('wp_head', 'pokemon_custom_title');
+    }
+    ?>
+
     <?php wp_head(); ?>
     <style>
         body {
