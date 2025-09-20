@@ -5,24 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <?php
-    if (!function_exists('_wp_render_title_tag')) {
-        function pokemon_custom_title() {
-            echo '<title>';
-            if (is_home() || is_front_page()) {
-                bloginfo('name');
-            } elseif (is_single() || is_page()) {
-                wp_title('|', true, 'right');
-                bloginfo('name');
-            } elseif (is_archive()) {
-                wp_title('', true, 'right');
-                bloginfo('name');
-            } else {
-                bloginfo('name');
-            }
-            echo '</title>';
+    // Activar soporte de título en WordPress
+    add_theme_support('title-tag');
+
+    // Personalizar título en la página de inicio
+    add_filter('document_title_parts', function($title) {
+        if (is_front_page() || is_home()) {
+            $title['title'] = get_bloginfo('name') . ' - ' . get_bloginfo('description');
         }
-        add_action('wp_head', 'pokemon_custom_title');
-    }
+        return $title;
+    });
     ?>
 
     <?php wp_head(); ?>
@@ -31,6 +23,15 @@
             background-color: <?php echo esc_attr(get_theme_mod('pokemon_bg_color', '#8890f8')); ?>;
             font-family: <?php echo esc_attr(get_theme_mod('pokemon_default_font', "'pokemon_emeraldregular', sans-serif")); ?>;
         }
+
+        /* Nombre del sitio */
+		.site-title a {
+		text-decoration: none;
+		transition: color 0.3s;
+		}
+		.site-title a:hover {
+}
+
 
         /* Skip link */
         .skip-link {
@@ -171,7 +172,15 @@
         <?php endif; ?>
 
         <div class="site-branding">
-            <h1 class="site-title"><?php bloginfo('name'); ?></h1>
+            <?php if (is_front_page() && is_home()) : ?>
+                <h1 class="site-title">
+                    <a href="<?php echo esc_url(home_url('/')); ?>" rel="home"><?php bloginfo('name'); ?></a>
+                </h1>
+            <?php else : ?>
+                <p class="site-title">
+                    <a href="<?php echo esc_url(home_url('/')); ?>" rel="home"><?php bloginfo('name'); ?></a>
+                </p>
+            <?php endif; ?>
             <p class="site-description"><?php bloginfo('description'); ?></p>
         </div>
 
