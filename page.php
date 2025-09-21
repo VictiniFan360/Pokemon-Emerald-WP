@@ -1,5 +1,5 @@
 <?php
-get_header(); 
+get_header();
 ?>
 
 <main id="main-content" class="content-area">
@@ -11,8 +11,12 @@ get_header();
 
                 <h1 class="entry-title"><?php the_title(); ?></h1>
 
+                <div class="entry-meta">
+                    <?php echo get_the_date(); ?> | <?php the_author(); ?>
+                </div>
+
                 <div class="entry-content">
-                    <?php the_content();?>
+                    <?php the_content(); ?>
                 </div>
 
             </article>
@@ -21,7 +25,7 @@ get_header();
     <?php else : ?>
 
         <div class="frame-container" style="text-align:center;">
-            <p><?php esc_html_e('No se encontró la página.', 'pokemon-theme'); ?></p>
+            <p><?php esc_html_e('No se encontraron páginas.', 'pokemon-theme'); ?></p>
         </div>
 
     <?php endif; ?>

@@ -4,19 +4,6 @@
     <meta charset="<?php bloginfo('charset'); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <?php
-    // Activar soporte de título en WordPress
-    add_theme_support('title-tag');
-
-    // Personalizar título en la página de inicio
-    add_filter('document_title_parts', function($title) {
-        if (is_front_page() || is_home()) {
-            $title['title'] = get_bloginfo('name') . ' - ' . get_bloginfo('description');
-        }
-        return $title;
-    });
-    ?>
-
     <?php wp_head(); ?>
     <style>
         body {
@@ -25,13 +12,14 @@
         }
 
         /* Nombre del sitio */
-		.site-title a {
-		text-decoration: none;
-		transition: color 0.3s;
-		}
-		.site-title a:hover {
-}
-
+        .site-title a {
+            color: <?php echo esc_attr(get_theme_mod('pokemon_site_title_color', '#111111')); ?>;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .site-title a:hover {
+            color: #005fcc; /* accesible */
+        }
 
         /* Skip link */
         .skip-link {
@@ -48,18 +36,6 @@
         }
         .skip-link:focus {
             top: 10px;
-        }
-
-        /* Screen reader text */
-        .screen-reader-text {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            overflow: hidden;
-            clip: rect(0,0,0,0);
-            white-space: nowrap;
-            border: 0;
         }
 
         header.frame-container {
@@ -119,21 +95,6 @@
             color: #ffcb05;
         }
 
-        .navbar-search {
-            margin-left: 20px;
-        }
-
-        .navbar-search input[type="search"] {
-            padding: 5px 8px;
-            font-size: 0.9rem;
-        }
-
-        .navbar-search button {
-            padding: 5px 10px;
-            font-size: 0.9rem;
-            cursor: pointer;
-        }
-
         /* Responsive */
         @media (max-width: 768px) {
             .header-inner {
@@ -144,10 +105,6 @@
             .navbar-ul {
                 flex-direction: column;
                 gap: 10px;
-            }
-            .navbar-search {
-                margin-left: 0;
-                margin-top: 10px;
             }
         }
 
@@ -198,17 +155,17 @@
                     <li><a href="<?php echo home_url(); ?>">Inicio</a></li>
                 <?php } ?>
             </ul>
-
-            <div class="navbar-search">
-                <form role="search" method="get" class="search-form" action="<?php echo esc_url(home_url('/')); ?>">
-                    <label class="screen-reader-text" for="header-search-field"><?php esc_html_e('Buscar en el sitio:', 'pokemon-theme'); ?></label>
-                    <input type="search" id="header-search-field" class="search-field" placeholder="<?php esc_attr_e('Buscar…', 'pokemon-theme'); ?>" value="<?php echo get_search_query(); ?>" name="s" />
-                    <button type="submit" class="search-submit"><?php esc_html_e('Buscar', 'pokemon-theme'); ?></button>
-                </form>
-            </div>
         </nav>
 
     </div>
 </header>
+
+<div class="frame-container" style="max-width:400px; margin: 20px auto 0 auto;">
+    <form role="search" method="get" class="search-form" action="<?php echo esc_url(home_url('/')); ?>">
+        <label class="screen-reader-text" for="separate-search-field"><?php esc_html_e('Buscar en el sitio:', 'pokemon-theme'); ?></label>
+        <input type="search" id="separate-search-field" class="search-field" placeholder="<?php esc_attr_e('Buscar…', 'pokemon-theme'); ?>" value="<?php echo get_search_query(); ?>" name="s" />
+        <button type="submit" class="search-submit"><?php esc_html_e('Buscar', 'pokemon-theme'); ?></button>
+    </form>
+</div>
 
 <main id="main-content" class="content-area">

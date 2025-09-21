@@ -19,20 +19,22 @@ get_header();
 
                 <div class="entry-content">
                     <?php
-                    if (has_excerpt()) {
-                        the_excerpt();
+                    if (is_page()) {
+                        the_content();
                     } else {
-                        echo wp_trim_words(get_the_content(), 50, '...');
+                        if (has_excerpt()) {
+                            the_excerpt();
+                        } else {
+                            echo wp_trim_words(get_the_content(), 50, '...');
+                        }
                     }
                     ?>
                 </div>
 
-                <?php if (!is_single()) : ?>
-                    <div class="frame-container read-more-frame" style="text-align:center; margin:15px auto; max-width:200px;">
-                        <a href="<?php the_permalink(); ?>" style="text-decoration:none; color: inherit;">
-                            <?php esc_html_e('Leer más', 'pokemon-theme'); ?>
-                        </a>
-                    </div>
+                <?php if (!is_single() && !is_page()) : ?>
+                    <p class="more-link">
+                        <a href="<?php the_permalink(); ?>"><?php esc_html_e('Leer más', 'pokemon-theme'); ?></a>
+                    </p>
                 <?php endif; ?>
 
             </article>

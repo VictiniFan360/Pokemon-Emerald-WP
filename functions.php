@@ -5,7 +5,7 @@ Theme URI: https://wpemerald.webs.nf
 Author: Alejo Fernández
 Author URI: https://alejofernandez.es.ht
 Description: Tema con tipografía Pokémon Emerald y marcos personalizables para NavBar, Footer y contenido.
-Version: 1.5
+Version: 1.6
 License: GPLv2 or later
 Text Domain: pokemon-theme
 */
@@ -162,7 +162,7 @@ function pokemon_customize_register($wp_customize) {
 
     // Color del nombre del sitio
     $wp_customize->add_setting('pokemon_site_title_color', array(
-        'default' => '#000000', // negro por defecto
+        'default' => '#000000',
         'sanitize_callback' => 'sanitize_hex_color',
     ));
     $wp_customize->add_control(new WP_Customize_Color_Control(
@@ -177,7 +177,7 @@ function pokemon_customize_register($wp_customize) {
 
     // Color del hover del nombre del sitio
     $wp_customize->add_setting('pokemon_site_title_hover_color', array(
-        'default' => '#003366', // azul oscuro accesible
+        'default' => '#003366',
         'sanitize_callback' => 'sanitize_hex_color',
     ));
     $wp_customize->add_control(new WP_Customize_Color_Control(
@@ -219,6 +219,17 @@ function pokemon_customize_register($wp_customize) {
         'section' => 'title_tagline',
         'type' => 'text',
     ));
+
+    // Accesibilidad (opcional)
+    $wp_customize->add_setting('pokemon_accessibility_mode', array(
+        'default' => false,
+        'sanitize_callback' => 'rest_sanitize_boolean',
+    ));
+    $wp_customize->add_control('pokemon_accessibility_mode', array(
+        'label' => __('Activar modo de accesibilidad (mejor enfoque en enlaces)', 'pokemon-theme'),
+        'section' => 'title_tagline',
+        'type' => 'checkbox',
+    ));
 }
 add_action('customize_register', 'pokemon_customize_register');
 
@@ -246,7 +257,7 @@ function pokemon_customize_css() {
         }
 
         .frame-container {
-            border-image-source: url("<?php echo get_template_directory_uri(); ?>/img/frame_<?php echo absint(get_theme_mod('pokemon_default_frame', 1)); ?>.png");
+            border-image-source: none; /* Dinámico via JS */
             display: block;
             padding: 20px;
             margin: 20px auto;
@@ -269,6 +280,38 @@ function pokemon_customize_css() {
         .site-title a:hover {
             color: <?php echo esc_attr(get_theme_mod('pokemon_site_title_hover_color', '#003366')); ?>;
         }
+
+        /* Botón "Leer más" personalizado */
+        .more-link {
+            display: inline-block;
+            background: none !important;
+            border: none !important;
+            padding: 0;
+            margin-top: 10px;
+            font-weight: bold;
+            font-size: 1rem;
+            color: #0056cc;
+            text-decoration: none;
+        }
+        .more-link:hover,
+        .more-link:focus {
+            color: #003399;
+            text-decoration: underline;
+        }
+        .more-link::before {
+            content: ">>";
+            margin-right: 5px;
+        }
+
+        <?php if (get_theme_mod('pokemon_accessibility_mode', false)) : ?>
+        a:hover,
+        a:focus {
+            outline: 2px dotted #005A9C;
+            outline-offset: 3px;
+            background-color: transparent;
+            color: #FFD500 !important;
+        }
+        <?php endif; ?>
     </style>
     <?php
 }

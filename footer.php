@@ -44,7 +44,13 @@
     </div>
 
     <!-- Páginas / Archivos / Categorías -->
-    <div class="footer-navs" style="margin-top:20px;">
+    <div style="margin-top:20px;">
+        <label for="toggleFooterNavs">
+            <input type="checkbox" id="toggleFooterNavs"> Mostrar Páginas / Archivos / Categorías
+        </label>
+    </div>
+
+    <div class="footer-navs" id="footerNavs" style="margin-top:20px; display:none;">
         <h4>Páginas</h4>
         <ul><?php wp_list_pages(); ?></ul>
 
@@ -66,13 +72,15 @@
 
 </footer>
 
-<!-- Script para recordar ajustes de marco y tipografía en todo el sitio -->
+<!-- Script para recordar ajustes de marco, tipografía y navegación en el footer -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const frameSelect = document.getElementById('frameSelectGlobal');
     const fontSelect = document.getElementById('fontSelect');
     const fontColor = document.getElementById('fontColor');
     const fontItalic = document.getElementById('fontItalic');
+    const toggleFooterNavs = document.getElementById('toggleFooterNavs');
+    const footerNavs = document.getElementById('footerNavs');
     const body = document.body;
 
     function applyFrame(frameNumber) {
@@ -98,6 +106,10 @@ document.addEventListener('DOMContentLoaded', function() {
     body.style.fontStyle = savedItalic ? 'italic' : 'normal';
     fontItalic.checked = savedItalic;
 
+    const savedNavsVisible = localStorage.getItem('pokemonFooterNavsVisible') === 'true';
+    footerNavs.style.display = savedNavsVisible ? 'block' : 'none';
+    toggleFooterNavs.checked = savedNavsVisible;
+
     // --- Escuchar cambios ---
     frameSelect.addEventListener('change', function() {
         applyFrame(this.value);
@@ -117,6 +129,11 @@ document.addEventListener('DOMContentLoaded', function() {
     fontItalic.addEventListener('change', function() {
         body.style.fontStyle = this.checked ? 'italic' : 'normal';
         localStorage.setItem('pokemonFontItalic', this.checked);
+    });
+
+    toggleFooterNavs.addEventListener('change', function() {
+        footerNavs.style.display = this.checked ? 'block' : 'none';
+        localStorage.setItem('pokemonFooterNavsVisible', this.checked);
     });
 });
 </script>
