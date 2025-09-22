@@ -1,3 +1,6 @@
+/* ==============================
+   Estilos generales
+   ============================== */
 body {
 	margin: 0;
 	padding: 0;
@@ -19,6 +22,7 @@ body {
 	box-sizing: border-box;
 }
 
+/* Header y Footer */
 header.frame-container,
 footer.frame-container {
 	display: flex;
@@ -28,7 +32,9 @@ footer.frame-container {
 	text-align: center;
 }
 
-article.frame-container {
+/* Contenido: entradas y páginas */
+article.frame-container,
+.page.frame-container {
 	max-width: 600px;
 	padding: 15px;
 	margin: 20px auto;
@@ -37,15 +43,18 @@ article.frame-container {
 	text-align: center;
 }
 
-article.frame-container * {
+article.frame-container *,
+.page.frame-container * {
 	text-align: inherit;
 }
 
-article.frame-container h2 {
+article.frame-container h2,
+.page.frame-container h2 {
 	font-size: 1.4rem;
 	margin-bottom: 10px;
 }
 
+/* Navbar */
 .navbar-ul {
 	list-style: none;
 	display: flex;
@@ -80,15 +89,43 @@ article.frame-container h2 {
 	color: #ffcb05;
 }
 
+/* Marco global */
 #marco-global {
 	text-align: center;
 	margin-top: 15px;
 }
 
+/* Créditos */
 .site-credit {
 	text-align: center;
 	font-size: 0.85rem;
 	color: #555;
 	margin-top: 10px;
 	font-style: italic;
+}
+
+/* ==============================
+   Estilos para pantallas móviles
+   ============================== */
+@media (max-width: 768px) {
+	article.frame-container,
+	.page.frame-container {
+		width: 95%;
+		padding: 10px;
+		font-size: 0.9rem;
+	}
+
+	.navbar-ul {
+		flex-direction: column;
+		gap: 10px;
+		padding: 5px;
+	}
+
+	.navbar-ul li {
+		padding-left: 0;
+	}
+
+	.navbar-ul li::before {
+		left: -10px;
+	}
 }
