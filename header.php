@@ -17,23 +17,20 @@
             text-decoration: none;
             transition: color 0.3s;
         }
-        .site-title a:hover {
-            color: #005fcc; /* accesible */
-        }
 
-        /* Skip link */
         .skip-link {
-            position: absolute;
-            top: -40px;
-            left: 0;
-            background: #ffcb05;
-            color: #111;
-            padding: 8px 15px;
-            z-index: 1000;
-            text-decoration: none;
-            font-weight: bold;
-            transition: top 0.3s;
-        }
+		position: absolute;
+		top: -40px;
+		left: 0;
+		background: #6BB0FF;
+		color: #111;
+		padding: 8px 15px;
+		z-index: 1000;
+		text-decoration: none;
+		font-weight: bold;
+		transition: top 0.3s;
+	}
+
         .skip-link:focus {
             top: 10px;
         }
@@ -76,23 +73,22 @@
             padding-left: 18px;
         }
 
+        /* Punteado inicial */
         .navbar-ul li::before {
             content: "▶";
             position: absolute;
             left: 0;
             color: #ffcb05;
             font-size: 0.9rem;
+            transition: none;
         }
 
+        /* Enlaces NavBar */
         .navbar-ul a {
             text-decoration: none;
             color: #111;
             font-weight: bold;
-            transition: 0.2s;
-        }
-
-        .navbar-ul a:hover {
-            color: #ffcb05;
+            transition: none;
         }
 
         /* Responsive */

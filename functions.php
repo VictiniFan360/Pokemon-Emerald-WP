@@ -5,7 +5,7 @@ Theme URI: https://wpemerald.webs.nf
 Author: Alejo Fernández
 Author URI: https://alejofernandez.es.ht
 Description: Tema con tipografía Pokémon Emerald y marcos personalizables para NavBar, Footer y contenido.
-Version: 1.6
+Version: 1.7
 License: GPLv2 or later
 Text Domain: pokemon-theme
 */
@@ -144,6 +144,23 @@ function pokemon_customize_register($wp_customize) {
         )
     ));
 
+    // Imagen de fondo opcional
+    $wp_customize->add_setting('pokemon_bg_image', array(
+        'default' => '',
+        'sanitize_callback' => 'esc_url_raw',
+    ));
+    $wp_customize->add_control(new WP_Customize_Image_Control(
+        $wp_customize,
+        'pokemon_bg_image_control',
+        array(
+            'label'       => __('Imagen de fondo de la página', 'pokemon-theme'),
+            'section'     => 'colors',
+            'settings'    => 'pokemon_bg_image',
+            'description' => __('Sube una imagen opcional para el fondo de la página (PNG o WebP).', 'pokemon-theme'),
+            'mime_type'   => 'image',
+        )
+    ));
+
     // Color de texto general
     $wp_customize->add_setting('pokemon_default_text_color', array(
         'default' => '#111111',
@@ -238,81 +255,104 @@ add_action('customize_register', 'pokemon_customize_register');
 // ========================
 function pokemon_customize_css() {
     ?>
-    <style type="text/css">
-        @font-face {
-            font-family: 'pokemon_emeraldregular';
-            src: url('<?php echo get_template_directory_uri(); ?>/res/pokemon-emerald-webfont.eot');
-            src: url('<?php echo get_template_directory_uri(); ?>/res/pokemon-emerald-webfont.eot?#iefix') format('embedded-opentype'),
-                 url('<?php echo get_template_directory_uri(); ?>/res/pokemon-emerald-webfont.woff2') format('woff2'),
-                 url('<?php echo get_template_directory_uri(); ?>/res/pokemon-emerald-webfont.woff') format('woff'),
-                 url('<?php echo get_template_directory_uri(); ?>/res/pokemon-emerald-webfont.ttf') format('truetype');
-            font-weight: normal;
-            font-style: normal;
-        }
+<style type="text/css">
+    @font-face {
+        font-family: 'pokemon_emeraldregular';
+        src: url('<?php echo get_template_directory_uri(); ?>/res/pokemon-emerald-webfont.eot');
+        src: url('<?php echo get_template_directory_uri(); ?>/res/pokemon-emerald-webfont.eot?#iefix') format('embedded-opentype'),
+             url('<?php echo get_template_directory_uri(); ?>/res/pokemon-emerald-webfont.woff2') format('woff2'),
+             url('<?php echo get_template_directory_uri(); ?>/res/pokemon-emerald-webfont.woff') format('woff'),
+             url('<?php echo get_template_directory_uri(); ?>/res/pokemon-emerald-webfont.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+    }
 
-        body {
-            background-color: <?php echo esc_attr(get_theme_mod('pokemon_bg_color', '#8890f8')); ?>;
-            font-family: <?php echo esc_attr(get_theme_mod('pokemon_default_font', "'pokemon_emeraldregular', sans-serif")); ?>;
-            color: <?php echo esc_attr(get_theme_mod('pokemon_default_text_color', '#111111')); ?>;
-        }
-
-        .frame-container {
-            border-image-source: none; /* Dinámico via JS */
-            display: block;
-            padding: 20px;
-            margin: 20px auto;
-            border: 30px solid transparent;
-            border-image-slice: 15;
-            border-image-repeat: repeat repeat;
-            border-image-width: 30px;
-            border-image-outset: 0;
-            background-color: #f8f8f8;
-            max-width: 800px;
-            width: 90%;
-            box-sizing: border-box;
-        }
-
-        .site-title a {
-            color: <?php echo esc_attr(get_theme_mod('pokemon_site_title_color', '#000000')); ?>;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-        .site-title a:hover {
-            color: <?php echo esc_attr(get_theme_mod('pokemon_site_title_hover_color', '#003366')); ?>;
-        }
-
-        /* Botón "Leer más" personalizado */
-        .more-link {
-            display: inline-block;
-            background: none !important;
-            border: none !important;
-            padding: 0;
-            margin-top: 10px;
-            font-weight: bold;
-            font-size: 1rem;
-            color: #0056cc;
-            text-decoration: none;
-        }
-        .more-link:hover,
-        .more-link:focus {
-            color: #003399;
-            text-decoration: underline;
-        }
-        .more-link::before {
-            content: ">>";
-            margin-right: 5px;
-        }
-
-        <?php if (get_theme_mod('pokemon_accessibility_mode', false)) : ?>
-        a:hover,
-        a:focus {
-            outline: 2px dotted #005A9C;
-            outline-offset: 3px;
-            background-color: transparent;
-            color: #FFD500 !important;
-        }
+    body {
+        background-color: <?php echo esc_attr(get_theme_mod('pokemon_bg_color', '#8890f8')); ?>;
+        <?php if (get_theme_mod('pokemon_bg_image')) : ?>
+            background-image: url('<?php echo esc_url(get_theme_mod('pokemon_bg_image')); ?>');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
         <?php endif; ?>
-    </style>
+        font-family: <?php echo esc_attr(get_theme_mod('pokemon_default_font', "'pokemon_emeraldregular', sans-serif")); ?>;
+        color: <?php echo esc_attr(get_theme_mod('pokemon_default_text_color', '#111111')); ?>;
+    }
+
+    .frame-container {
+        border-image-source: none;
+        display: block;
+        padding: 20px;
+        margin: 20px auto;
+        border: 30px solid transparent;
+        border-image-slice: 15;
+        border-image-repeat: repeat repeat;
+        border-image-width: 30px;
+        border-image-outset: 0;
+        background-color: #f8f8f8;
+        max-width: 800px;
+        width: 90%;
+        box-sizing: border-box;
+    }
+
+    .site-title a {
+        color: <?php echo esc_attr(get_theme_mod('pokemon_site_title_color', '#000000')); ?>;
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+    .site-title a:hover {
+        color: <?php echo esc_attr(get_theme_mod('pokemon_site_title_hover_color', '#003366')); ?>;
+    }
+
+    /* Botón "Leer más" personalizado */
+    .more-link {
+        display: inline-block;
+        background: none !important;
+        border: none !important;
+        padding: 0;
+        margin-top: 10px;
+        font-weight: bold;
+        font-size: 1rem;
+        color: #0056cc;
+        text-decoration: none;
+    }
+    .more-link:hover,
+    .more-link:focus {
+        color: #003399;
+        text-decoration: underline;
+    }
+    .more-link::before {
+        content: ">>";
+        margin-right: 5px;
+    }
+
+    a:hover::before,
+    a:focus::before,
+    a:active::before {
+        color: #005fcc;
+    }
+
+    a:hover,
+    a:focus,
+    a:active {
+        color: #005fcc;
+        outline: none;
+    }
+
+    <?php if (get_theme_mod('pokemon_accessibility_mode', false)) : ?>
+    a:hover,
+    a:focus {
+        outline: 2px dotted #005A9C;
+        outline-offset: 3px;
+        background-color: transparent;
+        color: #0011ff !important;
+    }
+    a:hover::before,
+    a:focus::before {
+        color: #0011ff !important;
+    }
+    <?php endif; ?>
+</style>
     <?php
 }
 add_action('wp_head', 'pokemon_customize_css');
