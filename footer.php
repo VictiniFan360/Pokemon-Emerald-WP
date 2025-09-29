@@ -1,8 +1,21 @@
 </main>
 
-<footer class="frame-container" id="marco-footer">
+<footer class="frame-container" id="marco-footer" style="background-color:#e9e9e9;">
 
-    <p>&copy; <?php echo date('Y'); ?> <?php bloginfo('name'); ?> - <?php echo esc_html(get_theme_mod('pokemon_footer_text', 'Todos los derechos reservados')); ?></p>
+    <p>
+        &copy; 
+        <?php 
+        $start_year = get_theme_mod('pokemon_footer_start_year', '');
+        $current_year = date('Y');
+        if ($start_year && $start_year < $current_year) {
+            echo esc_html($start_year . '–' . $current_year);
+        } else {
+            echo esc_html($current_year);
+        }
+        ?>
+        <?php bloginfo('name'); ?> - 
+        <?php echo esc_html(get_theme_mod('pokemon_footer_text', 'Todos los derechos reservados')); ?>
+    </p>
 
     <!-- Marco global -->
     <div id="marco-global" style="margin-top:15px;">
