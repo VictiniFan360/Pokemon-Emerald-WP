@@ -4,8 +4,18 @@ get_header();
 
 <main id="main-content" class="content-area">
 
-    <?php if (have_posts()) : ?>
-        <?php while (have_posts()) : the_post(); ?>
+    <?php
+    $paged = get_query_var('paged') ? get_query_var('paged') : 1;
+
+    $args = array(
+        'posts_per_page' => 5,
+        'paged' => $paged,
+    );
+
+    $query = new WP_Query($args);
+
+    if ($query->have_posts()) :
+        while ($query->have_posts()) : $query->the_post(); ?>
 
             <div class="frame-container">
                 <article <?php post_class(); ?>>
@@ -43,15 +53,20 @@ get_header();
 
         <?php endwhile; ?>
 
-        <div class="pagination frame-container" style="text-align:center;">
-            <?php
-            the_posts_pagination(array(
-                'mid_size' => 2,
-                'prev_text' => __('« Anterior', 'pokemon-theme'),
-                'next_text' => __('Siguiente »', 'pokemon-theme'),
-            ));
-            ?>
-        </div>
+        <?php
+        if ($query->found_posts > 5) : ?>
+            <div class="pagination frame-container" style="text-align:center;">
+                <?php
+                echo paginate_links(array(
+                    'total'   => $query->max_num_pages,
+                    'current' => $paged,
+                    'mid_size'=> 2,
+                    'prev_text'=> __('« Anterior', 'pokemon-theme'),
+                    'next_text'=> __('Siguiente »', 'pokemon-theme'),
+                ));
+                ?>
+            </div>
+        <?php endif; ?>
 
     <?php else : ?>
 
@@ -60,6 +75,8 @@ get_header();
         </div>
 
     <?php endif; ?>
+
+    <?php wp_reset_postdata(); ?>
 
 </main>
 

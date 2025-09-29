@@ -1,6 +1,15 @@
 </main>
 
-<footer class="frame-container" id="marco-footer" style="background-color:#e9e9e9;">
+<footer class="frame-container" id="marco-footer" 
+    style="
+        background-color: <?php echo esc_attr(get_theme_mod('pokemon_bg_color', '#f8f8f8')); ?>;
+        <?php if(get_theme_mod('pokemon_bg_image')): ?>
+        background-image: url('<?php echo esc_url(get_theme_mod('pokemon_bg_image')); ?>');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        <?php endif; ?>
+    ">
 
     <p>
         &copy; 
