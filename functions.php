@@ -5,7 +5,7 @@ Theme URI: https://wpemerald.webs.nf
 Author: Alejo Fernández
 Author URI: https://alejofernandez.es.ht
 Description: Tema con tipografía Pokémon Emerald y marcos personalizables para NavBar, Footer y contenido.
-Version: 1.9
+Version: 2.0
 License: GPLv2 or later
 Text Domain: pokemon-theme
 */
@@ -80,7 +80,7 @@ function pokemon_theme_scripts() {
         'pokemon-frame',
         get_template_directory_uri() . '/js/frame.js',
         array(),
-        '1.10',
+        '2.0',
         true
     );
 
@@ -128,7 +128,7 @@ function pokemon_customize_register($wp_customize) {
         ),
     ));
 
-    // Color de fondo
+    // Color de fondo general
     $wp_customize->add_setting('pokemon_bg_color', array(
         'default' => '#8890f8',
         'transport' => 'refresh',
@@ -311,7 +311,9 @@ function pokemon_customize_css() {
             width: 90%;
             box-sizing: border-box;
         }
-
+		.footer-area {
+		background-color: #f8f8f8;
+		}
         /* Entradas y páginas */
         article.frame-container,
         .page.frame-container {
@@ -327,7 +329,7 @@ function pokemon_customize_css() {
             color: <?php echo esc_attr(get_theme_mod('pokemon_site_title_hover_color', '#003366')); ?>;
         }
 
-        .more-link {
+        .more-link a {
             display: inline-block;
             background: none !important;
             border: none !important;
@@ -338,12 +340,12 @@ function pokemon_customize_css() {
             color: #0056cc;
             text-decoration: none;
         }
-        .more-link:hover,
-        .more-link:focus {
+        .more-link a:hover,
+        .more-link a:focus {
             color: #003399;
             text-decoration: underline;
         }
-        .more-link::before {
+        .more-link a::before {
             content: ">>";
             margin-right: 5px;
         }

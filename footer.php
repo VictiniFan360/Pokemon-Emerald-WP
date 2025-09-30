@@ -1,15 +1,6 @@
 </main>
 
-<footer class="frame-container" id="marco-footer" 
-    style="
-        background-color: <?php echo esc_attr(get_theme_mod('pokemon_bg_color', '#f8f8f8')); ?>;
-        <?php if(get_theme_mod('pokemon_bg_image')): ?>
-        background-image: url('<?php echo esc_url(get_theme_mod('pokemon_bg_image')); ?>');
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        <?php endif; ?>
-    ">
+<footer class="frame-container footer-area" id="marco-footer">
 
     <p>
         &copy; 
@@ -93,8 +84,6 @@
     </div>
 
 </footer>
-
-<!-- Script para recordar ajustes de marco, tipografía y navegación en el footer -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const frameSelect = document.getElementById('frameSelectGlobal');
@@ -110,8 +99,6 @@ document.addEventListener('DOMContentLoaded', function() {
             el.style.borderImageSource = `url('<?php echo get_template_directory_uri(); ?>/img/frame_${frameNumber}.png')`;
         });
     }
-
-    // --- Cargar ajustes guardados ---
     const savedFrame = localStorage.getItem('pokemonFrame') || frameSelect.value;
     applyFrame(savedFrame);
     frameSelect.value = savedFrame;
@@ -125,37 +112,35 @@ document.addEventListener('DOMContentLoaded', function() {
     fontColor.value = savedColor;
 
     const savedItalic = localStorage.getItem('pokemonFontItalic') === 'true';
-    body.style.fontStyle = savedItalic ? 'italic' : 'normal';
+    if (savedItalic) body.style.fontStyle = 'italic';
     fontItalic.checked = savedItalic;
 
-    const savedNavsVisible = localStorage.getItem('pokemonFooterNavsVisible') === 'true';
-    footerNavs.style.display = savedNavsVisible ? 'block' : 'none';
-    toggleFooterNavs.checked = savedNavsVisible;
-
-    // --- Escuchar cambios ---
-    frameSelect.addEventListener('change', function() {
-        applyFrame(this.value);
-        localStorage.setItem('pokemonFrame', this.value);
+    const savedNavToggle = localStorage.getItem('pokemonFooterNavs') === 'true';
+    footerNavs.style.display = savedNavToggle ? 'block' : 'none';
+    toggleFooterNavs.checked = savedNavToggle;
+    frameSelect.addEventListener('change', () => {
+        localStorage.setItem('pokemonFrame', frameSelect.value);
+        applyFrame(frameSelect.value);
     });
 
-    fontSelect.addEventListener('change', function() {
-        body.style.fontFamily = this.value;
-        localStorage.setItem('pokemonFont', this.value);
+    fontSelect.addEventListener('change', () => {
+        localStorage.setItem('pokemonFont', fontSelect.value);
+        body.style.fontFamily = fontSelect.value;
     });
 
-    fontColor.addEventListener('input', function() {
-        body.style.color = this.value;
-        localStorage.setItem('pokemonFontColor', this.value);
+    fontColor.addEventListener('input', () => {
+        localStorage.setItem('pokemonFontColor', fontColor.value);
+        body.style.color = fontColor.value;
     });
 
-    fontItalic.addEventListener('change', function() {
-        body.style.fontStyle = this.checked ? 'italic' : 'normal';
-        localStorage.setItem('pokemonFontItalic', this.checked);
+    fontItalic.addEventListener('change', () => {
+        localStorage.setItem('pokemonFontItalic', fontItalic.checked);
+        body.style.fontStyle = fontItalic.checked ? 'italic' : 'normal';
     });
 
-    toggleFooterNavs.addEventListener('change', function() {
-        footerNavs.style.display = this.checked ? 'block' : 'none';
-        localStorage.setItem('pokemonFooterNavsVisible', this.checked);
+    toggleFooterNavs.addEventListener('change', () => {
+        localStorage.setItem('pokemonFooterNavs', toggleFooterNavs.checked);
+        footerNavs.style.display = toggleFooterNavs.checked ? 'block' : 'none';
     });
 });
 </script>
