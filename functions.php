@@ -5,7 +5,7 @@ Theme URI: https://wpemerald.webs.nf
 Author: Alejo Fernández
 Author URI: https://alejofernandez.es.ht
 Description: Tema con tipografía Pokémon Emerald, marcos personalizables, navbar, sidebar, footer y accesibilidad aumentada.
-Version: 2.2
+Version: 2.2.2
 License: GPLv2 or later
 Text Domain: pokemon-theme
 */
@@ -58,15 +58,13 @@ add_action('widgets_init', 'pokemon_register_widgets');
 // SCRIPTS Y ESTILOS
 // ========================
 function pokemon_theme_scripts() {
-    // CSS principal
     wp_enqueue_style('pokemon-style', get_stylesheet_uri());
 
-    // JS del marco y fuente
     wp_register_script(
         'pokemon-frame',
         get_template_directory_uri() . '/js/frame.js',
         array(),
-        '2.1',
+        '2.2',
         true
     );
 
@@ -102,10 +100,7 @@ function pokemon_customize_register($wp_customize) {
         'label'    => __('Marco por defecto', 'pokemon-theme'),
         'section'  => 'title_tagline',
         'type'     => 'select',
-        'choices'  => array_combine(
-            range(1, 10),
-            array_map(fn($i) => "Marco $i", range(1, 10))
-        ),
+        'choices'  => array_combine(range(1, 10), array_map(fn($i) => "Marco $i", range(1, 10))),
     ));
 
     // Tipografía por defecto
@@ -141,22 +136,51 @@ function pokemon_customize_register($wp_customize) {
         )
     ));
 
-    // Modo de accesibilidad aumentada
+    // Accesibilidad aumentada
     $wp_customize->add_setting('pokemon_accessibility_mode', array(
         'default'           => false,
         'sanitize_callback' => 'rest_sanitize_boolean',
     ));
     $wp_customize->add_control('pokemon_accessibility_mode', array(
-        'label'    => __('Activar modo de accesibilidad aumentada', 'pokemon-theme'),
+        'label'       => __('Activar modo de accesibilidad aumentada', 'pokemon-theme'),
         'description' => __('Muestra enlaces en azul y rectángulos punteados al enfocar.', 'pokemon-theme'),
-        'section'  => 'title_tagline',
-        'type'     => 'checkbox',
+        'section'     => 'title_tagline',
+        'type'        => 'checkbox',
+    ));
+
+    // Opción de logo como background
+    $wp_customize->add_setting('pokemon_logo_as_bg', array(
+        'default'           => false,
+        'sanitize_callback' => 'rest_sanitize_boolean',
+    ));
+    $wp_customize->add_control('pokemon_logo_as_bg', array(
+        'label'       => __('Usar logo como background', 'pokemon-theme'),
+        'description' => __('Si está activado, el logo se mostrará como background en lugar de imagen <img>.'),
+        'section'     => 'title_tagline',
+        'type'        => 'checkbox',
     ));
 }
 add_action('customize_register', 'pokemon_customize_register');
 
 // ========================
-// CSS DINÁMICO INYECTADO
+// FUNCIÓN PARA IMPRIMIR EL LOGO
+// ========================
+function pokemon_the_logo() {
+    $logo_id   = get_theme_mod('custom_logo');
+    $logo_url  = wp_get_attachment_image_url($logo_id, 'full');
+    $site_name = get_bloginfo('name');
+
+    if (get_theme_mod('pokemon_logo_as_bg', false) && $logo_url) {
+        echo '<div id="logo"><a href="' . esc_url(home_url('/')) . '" style="background-image:url(' . esc_url($logo_url) . ');" aria-label="' . esc_attr($site_name) . '"></a></div>';
+    } elseif ($logo_url) {
+        echo '<div id="logo"><a href="' . esc_url(home_url('/')) . '"><img src="' . esc_url($logo_url) . '" alt="' . esc_attr($site_name) . '"></a></div>';
+    } else {
+        echo '<div id="logo"><a href="' . esc_url(home_url('/')) . '">' . esc_html($site_name) . '</a></div>';
+    }
+}
+
+// ========================
+// CSS DINÁMICO
 // ========================
 function pokemon_dynamic_css() {
     $bg_color   = get_theme_mod('pokemon_bg_color', '#f8f8f8');
@@ -175,7 +199,6 @@ function pokemon_dynamic_css() {
         }
 
         <?php if ($accessible): ?>
-        /* === Accesibilidad Aumentada === */
         a {
             color: #0056b3 !important;
             text-decoration: underline !important;
