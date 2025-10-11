@@ -5,7 +5,7 @@ Theme URI: https://wpemerald.webs.nf
 Author: Alejo Fernández
 Author URI: https://alejofernandez.es.ht
 Description: Tema con tipografía Pokémon Emerald y marcos personalizables para NavBar, Footer y contenido.
-Version: 2.0
+Version: 2.1
 License: GPLv2 or later
 Text Domain: pokemon-theme
 */
@@ -26,7 +26,7 @@ function pokemon_theme_setup() {
 add_action('after_setup_theme', 'pokemon_theme_setup');
 
 // ========================
-// Título personalizado en la página de inicio
+// Título personalizado
 // ========================
 function pokemon_custom_document_title($title) {
     if (is_front_page() || is_home()) {
@@ -99,7 +99,7 @@ function sanitize_frame_choice($input) {
 // Customizer
 // ========================
 function pokemon_customize_register($wp_customize) {
-    // Marco predeterminado
+    // Marco por defecto
     $wp_customize->add_setting('pokemon_default_frame', array(
         'default' => 1,
         'sanitize_callback' => 'sanitize_frame_choice',
@@ -111,15 +111,13 @@ function pokemon_customize_register($wp_customize) {
         'choices' => array_combine(range(1, 10), array_map(fn($i) => "Marco $i", range(1, 10))),
     ));
 
-    // Color de fondo
+    // Colores y fondo
     $wp_customize->add_setting('pokemon_bg_color', array(
         'default' => '#f8f8f8',
-        'transport' => 'refresh',
         'sanitize_callback' => 'sanitize_hex_color',
     ));
     $wp_customize->add_control(new WP_Customize_Color_Control(
-        $wp_customize,
-        'pokemon_bg_color_control',
+        $wp_customize, 'pokemon_bg_color_control',
         array(
             'label' => __('Color de Fondo', 'pokemon-theme'),
             'section' => 'colors',
@@ -127,14 +125,12 @@ function pokemon_customize_register($wp_customize) {
         )
     ));
 
-    // Imagen de fondo
     $wp_customize->add_setting('pokemon_bg_image', array(
         'default' => '',
         'sanitize_callback' => 'esc_url_raw',
     ));
     $wp_customize->add_control(new WP_Customize_Image_Control(
-        $wp_customize,
-        'pokemon_bg_image_control',
+        $wp_customize, 'pokemon_bg_image_control',
         array(
             'label' => __('Imagen de fondo (opcional)', 'pokemon-theme'),
             'section' => 'colors',
@@ -142,14 +138,13 @@ function pokemon_customize_register($wp_customize) {
         )
     ));
 
-    // Colores
+    // Colores de texto y título
     $wp_customize->add_setting('pokemon_default_text_color', array(
         'default' => '#111111',
         'sanitize_callback' => 'sanitize_hex_color',
     ));
     $wp_customize->add_control(new WP_Customize_Color_Control(
-        $wp_customize,
-        'pokemon_default_text_color_control',
+        $wp_customize, 'pokemon_default_text_color_control',
         array(
             'label' => __('Color de texto', 'pokemon-theme'),
             'section' => 'colors',
@@ -162,26 +157,11 @@ function pokemon_customize_register($wp_customize) {
         'sanitize_callback' => 'sanitize_hex_color',
     ));
     $wp_customize->add_control(new WP_Customize_Color_Control(
-        $wp_customize,
-        'pokemon_site_title_color_control',
+        $wp_customize, 'pokemon_site_title_color_control',
         array(
             'label' => __('Color del nombre del sitio', 'pokemon-theme'),
             'section' => 'colors',
             'settings' => 'pokemon_site_title_color',
-        )
-    ));
-
-    $wp_customize->add_setting('pokemon_site_title_hover_color', array(
-        'default' => '#003366',
-        'sanitize_callback' => 'sanitize_hex_color',
-    ));
-    $wp_customize->add_control(new WP_Customize_Color_Control(
-        $wp_customize,
-        'pokemon_site_title_hover_color_control',
-        array(
-            'label' => __('Color del hover del nombre del sitio', 'pokemon-theme'),
-            'section' => 'colors',
-            'settings' => 'pokemon_site_title_hover_color',
         )
     ));
 
@@ -202,19 +182,18 @@ function pokemon_customize_register($wp_customize) {
         ),
     ));
 
-    // Año inicial
+    // Footer
     $wp_customize->add_setting('pokemon_footer_start_year', array(
         'default' => '',
         'sanitize_callback' => 'absint',
     ));
     $wp_customize->add_control('pokemon_footer_start_year', array(
-        'label'       => __('Año inicial del copyright (opcional)', 'pokemon-theme'),
-        'section'     => 'title_tagline',
-        'type'        => 'number',
+        'label' => __('Año inicial del copyright (opcional)', 'pokemon-theme'),
+        'section' => 'title_tagline',
+        'type' => 'number',
         'input_attrs' => array('min' => 2000, 'max' => date('Y')),
     ));
 
-    // Texto del footer
     $wp_customize->add_setting('pokemon_footer_text', array(
         'default' => 'Todos los derechos reservados',
         'sanitize_callback' => 'sanitize_text_field',
@@ -225,23 +204,21 @@ function pokemon_customize_register($wp_customize) {
         'type' => 'text',
     ));
 
-    // Modo logo (nuevo)
+    // Modo de logotipo
     $wp_customize->add_setting('pokemon_logo_display_mode', array(
-        'default'           => 'background',
+        'default' => 'background',
         'sanitize_callback' => function($input) {
-            $valid = array('image', 'background');
-            return in_array($input, $valid) ? $input : 'background';
+            return in_array($input, ['image', 'background']) ? $input : 'background';
         },
     ));
     $wp_customize->add_control('pokemon_logo_display_mode_control', array(
-        'label'       => __('Modo de visualización del logotipo', 'pokemon-theme'),
-        'description' => __('Elegí si el logotipo se muestra como imagen o como fondo del título.', 'pokemon-theme'),
-        'section'     => 'title_tagline',
-        'type'        => 'select',
-        'choices'     => array(
+        'label' => __('Modo de visualización del logotipo', 'pokemon-theme'),
+        'section' => 'title_tagline',
+        'type' => 'select',
+        'choices' => [
             'image'      => __('Mostrar como imagen (the_custom_logo)', 'pokemon-theme'),
-            'background' => __('Usar como fondo del título (recomendado)', 'pokemon-theme'),
-        ),
+            'background' => __('Usar como fondo del título', 'pokemon-theme'),
+        ],
     ));
 }
 add_action('customize_register', 'pokemon_customize_register');
