@@ -3,10 +3,7 @@
 Theme Name: Pokémerald Theme
 Theme URI: https://wpemerald.webs.nf
 Author: Alejo Fernández
-Author URI: https://alejofernandez.es.ht
-Description: Tema con tipografía Pokémon Emerald, marcos personalizables, navbar, sidebar, footer y accesibilidad aumentada.
 Version: 2.2.2
-License: GPLv2 or later
 Text Domain: pokemon-theme
 */
 
@@ -87,11 +84,10 @@ function sanitize_frame_choice($input) {
 }
 
 // ========================
-// PERSONALIZADOR (CUSTOMIZER)
+// CUSTOMIZER
 // ========================
 function pokemon_customize_register($wp_customize) {
 
-    // Marco predeterminado
     $wp_customize->add_setting('pokemon_default_frame', array(
         'default'           => 1,
         'sanitize_callback' => 'sanitize_frame_choice',
@@ -103,7 +99,6 @@ function pokemon_customize_register($wp_customize) {
         'choices'  => array_combine(range(1, 10), array_map(fn($i) => "Marco $i", range(1, 10))),
     ));
 
-    // Tipografía por defecto
     $wp_customize->add_setting('pokemon_default_font', array(
         'default'           => "'pokemon_emeraldregular', sans-serif",
         'sanitize_callback' => 'sanitize_text_field',
@@ -120,7 +115,6 @@ function pokemon_customize_register($wp_customize) {
         ),
     ));
 
-    // Color de fondo
     $wp_customize->add_setting('pokemon_bg_color', array(
         'default'           => '#f8f8f8',
         'sanitize_callback' => 'sanitize_hex_color',
@@ -136,7 +130,6 @@ function pokemon_customize_register($wp_customize) {
         )
     ));
 
-    // Accesibilidad aumentada
     $wp_customize->add_setting('pokemon_accessibility_mode', array(
         'default'           => false,
         'sanitize_callback' => 'rest_sanitize_boolean',
@@ -148,14 +141,14 @@ function pokemon_customize_register($wp_customize) {
         'type'        => 'checkbox',
     ));
 
-    // Opción de logo como background
+    // Logo como background accesible
     $wp_customize->add_setting('pokemon_logo_as_bg', array(
         'default'           => false,
         'sanitize_callback' => 'rest_sanitize_boolean',
     ));
     $wp_customize->add_control('pokemon_logo_as_bg', array(
-        'label'       => __('Usar logo como background', 'pokemon-theme'),
-        'description' => __('Si está activado, el logo se mostrará como background en lugar de imagen <img>.'),
+        'label'       => __('Usar logo como background accesible', 'pokemon-theme'),
+        'description' => __('El logo se verá como imagen pero el nombre del sitio sigue siendo accesible y visible si se quita CSS.'),
         'section'     => 'title_tagline',
         'type'        => 'checkbox',
     ));
@@ -163,7 +156,7 @@ function pokemon_customize_register($wp_customize) {
 add_action('customize_register', 'pokemon_customize_register');
 
 // ========================
-// FUNCIÓN PARA IMPRIMIR EL LOGO
+// FUNCIÓN LOGO
 // ========================
 function pokemon_the_logo() {
     $logo_id   = get_theme_mod('custom_logo');
@@ -171,11 +164,11 @@ function pokemon_the_logo() {
     $site_name = get_bloginfo('name');
 
     if (get_theme_mod('pokemon_logo_as_bg', false) && $logo_url) {
-        echo '<div id="logo"><a href="' . esc_url(home_url('/')) . '" style="background-image:url(' . esc_url($logo_url) . ');" aria-label="' . esc_attr($site_name) . '"></a></div>';
+        echo '<h1 id="logo"><a href="' . esc_url(home_url('/')) . '" style="background-image:url(' . esc_url($logo_url) . ');" aria-label="' . esc_attr($site_name) . '">' . esc_html($site_name) . '</a></h1>';
     } elseif ($logo_url) {
-        echo '<div id="logo"><a href="' . esc_url(home_url('/')) . '"><img src="' . esc_url($logo_url) . '" alt="' . esc_attr($site_name) . '"></a></div>';
+        echo '<h1 id="logo"><a href="' . esc_url(home_url('/')) . '"><img src="' . esc_url($logo_url) . '" alt="' . esc_attr($site_name) . '"></a></h1>';
     } else {
-        echo '<div id="logo"><a href="' . esc_url(home_url('/')) . '">' . esc_html($site_name) . '</a></div>';
+        echo '<h1 id="logo"><a href="' . esc_url(home_url('/')) . '">' . esc_html($site_name) . '</a></h1>';
     }
 }
 
