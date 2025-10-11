@@ -3,7 +3,6 @@
 <head>
     <meta charset="<?php bloginfo('charset'); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <?php wp_head(); ?>
 </head>
 
@@ -16,28 +15,37 @@
 
         <!-- === LOGO / TÍTULO DEL SITIO === -->
         <div class="site-branding">
-            <?php if (get_theme_mod('custom_logo')) : ?>
-                <!-- Logo tradicional de WordPress -->
-                <div class="site-logo">
-                    <?php the_custom_logo(); ?>
-                </div>
-            <?php else : ?>
-                <!-- Logo como background accesible -->
-                <?php if (is_front_page() && is_home()) : ?>
-                    <h1 id="logo">
-                        <a href="<?php echo esc_url(home_url('/')); ?>" rel="home">
-                            <?php bloginfo('name'); ?>
-                        </a>
-                    </h1>
-                <?php else : ?>
-                    <p id="logo">
-                        <a href="<?php echo esc_url(home_url('/')); ?>" rel="home">
-                            <?php bloginfo('name'); ?>
-                        </a>
-                    </p>
-                <?php endif; ?>
-                <p class="site-description"><?php bloginfo('description'); ?></p>
-            <?php endif; ?>
+            <?php
+            // Obtener ID y URL del logo
+            $logo_id  = get_theme_mod('custom_logo');
+            $logo_url = $logo_id ? wp_get_attachment_image_url($logo_id, 'full') : '';
+            $site_name = get_bloginfo('name');
+            $logo_as_bg = get_theme_mod('pokemon_logo_as_bg', false);
+
+            if ($logo_as_bg && $logo_url) {
+                // Logo como background accesible
+                if (is_front_page() && is_home()) {
+                    echo '<h1 id="logo"><a href="' . esc_url(home_url('/')) . '" style="background-image:url(' . esc_url($logo_url) . ');" aria-label="' . esc_attr($site_name) . '">' . esc_html($site_name) . '</a></h1>';
+                } else {
+                    echo '<p id="logo"><a href="' . esc_url(home_url('/')) . '" style="background-image:url(' . esc_url($logo_url) . ');" aria-label="' . esc_attr($site_name) . '">' . esc_html($site_name) . '</a></p>';
+                }
+            } elseif ($logo_url) {
+                // Logo tradicional con <img>
+                if (is_front_page() && is_home()) {
+                    echo '<h1 id="logo"><a href="' . esc_url(home_url('/')) . '"><img src="' . esc_url($logo_url) . '" alt="' . esc_attr($site_name) . '"></a></h1>';
+                } else {
+                    echo '<p id="logo"><a href="' . esc_url(home_url('/')) . '"><img src="' . esc_url($logo_url) . '" alt="' . esc_attr($site_name) . '"></a></p>';
+                }
+            } else {
+                // Sin logo, solo texto
+                if (is_front_page() && is_home()) {
+                    echo '<h1 id="logo"><a href="' . esc_url(home_url('/')) . '">' . esc_html($site_name) . '</a></h1>';
+                } else {
+                    echo '<p id="logo"><a href="' . esc_url(home_url('/')) . '">' . esc_html($site_name) . '</a></p>';
+                }
+            }
+            ?>
+            <p class="site-description"><?php bloginfo('description'); ?></p>
         </div>
 
         <!-- === MENÚ DE NAVEGACIÓN === -->
