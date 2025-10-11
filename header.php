@@ -11,25 +11,43 @@
             font-family: <?php echo esc_attr(get_theme_mod('pokemon_default_font', "'pokemon_emeraldregular', sans-serif")); ?>;
         }
 
-        /* Nombre del sitio */
-        .site-title a {
-            color: <?php echo esc_attr(get_theme_mod('pokemon_site_title_color', '#111111')); ?>;
-            text-decoration: none;
-            transition: color 0.3s;
+        /* === LOGOTIPO COMO BACKGROUND === */
+        #logo {
+            background: url('<?php echo esc_url(get_theme_mod("custom_logo") ? wp_get_attachment_image_url(get_theme_mod("custom_logo"), "full") : get_template_directory_uri() . "/img/logo.png"); ?>') no-repeat center center;
+            background-size: contain;
+            width: 190px;
+            height: 85px;
+            margin: 0 auto;
+        }
+
+        #logo a {
+            display: block;
+            width: 100%;
+            height: 100%;
+            text-indent: -9999px;
+            overflow: hidden;
+        }
+
+        /* Descripción del sitio debajo del logo */
+        .site-description {
+            font-size: 0.9rem;
+            text-align: center;
+            color: <?php echo esc_attr(get_theme_mod('pokemon_default_text_color', '#111111')); ?>;
+            margin-top: 5px;
         }
 
         .skip-link {
-		position: absolute;
-		top: -40px;
-		left: 0;
-		background: #6BB0FF;
-		color: #111;
-		padding: 8px 15px;
-		z-index: 1000;
-		text-decoration: none;
-		font-weight: bold;
-		transition: top 0.3s;
-	}
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #6BB0FF;
+            color: #111;
+            padding: 8px 15px;
+            z-index: 1000;
+            text-decoration: none;
+            font-weight: bold;
+            transition: top 0.3s;
+        }
 
         .skip-link:focus {
             top: 10px;
@@ -80,7 +98,6 @@
             left: 0;
             color: #ffcb05;
             font-size: 0.9rem;
-            transition: none;
         }
 
         /* Enlaces NavBar */
@@ -88,7 +105,6 @@
             text-decoration: none;
             color: #111;
             font-weight: bold;
-            transition: none;
         }
 
         /* Responsive */
@@ -118,20 +134,18 @@
 <header class="frame-container">
     <div class="header-inner">
 
-        <?php if (has_custom_logo()) : ?>
-            <div class="site-logo">
-                <?php the_custom_logo(); ?>
-            </div>
-        <?php endif; ?>
-
         <div class="site-branding">
             <?php if (is_front_page() && is_home()) : ?>
-                <h1 class="site-title">
-                    <a href="<?php echo esc_url(home_url('/')); ?>" rel="home"><?php bloginfo('name'); ?></a>
+                <h1 id="logo">
+                    <a href="<?php echo esc_url(home_url('/')); ?>" rel="home">
+                        <?php bloginfo('name'); ?>
+                    </a>
                 </h1>
             <?php else : ?>
-                <p class="site-title">
-                    <a href="<?php echo esc_url(home_url('/')); ?>" rel="home"><?php bloginfo('name'); ?></a>
+                <p id="logo">
+                    <a href="<?php echo esc_url(home_url('/')); ?>" rel="home">
+                        <?php bloginfo('name'); ?>
+                    </a>
                 </p>
             <?php endif; ?>
             <p class="site-description"><?php bloginfo('description'); ?></p>
