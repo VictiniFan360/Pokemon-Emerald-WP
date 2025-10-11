@@ -7,33 +7,18 @@
     <?php wp_head(); ?>
     <style>
         body {
-            background-color: <?php echo esc_attr(get_theme_mod('pokemon_bg_color', '#8890f8')); ?>;
+            background-color: <?php echo esc_attr(get_theme_mod('pokemon_bg_color', '#f8f8f8')); ?>;
             font-family: <?php echo esc_attr(get_theme_mod('pokemon_default_font', "'pokemon_emeraldregular', sans-serif")); ?>;
         }
 
-        /* === LOGOTIPO COMO BACKGROUND === */
-        #logo {
-            background: url('<?php echo esc_url(get_theme_mod("custom_logo") ? wp_get_attachment_image_url(get_theme_mod("custom_logo"), "full") : get_template_directory_uri() . "/img/logo.png"); ?>') no-repeat center center;
+        #logo a {
+            background: url('<?php echo esc_url(get_theme_mod('custom_logo') ? wp_get_attachment_image_src(get_theme_mod('custom_logo'), 'full')[0] : get_template_directory_uri() . '/img/logo.png'); ?>') no-repeat center center;
             background-size: contain;
             width: 190px;
             height: 85px;
-            margin: 0 auto;
-        }
-
-        #logo a {
-            display: block;
-            width: 100%;
-            height: 100%;
+            font-size: 0;
+            display: inline-block;
             text-indent: -9999px;
-            overflow: hidden;
-        }
-
-        /* Descripción del sitio debajo del logo */
-        .site-description {
-            font-size: 0.9rem;
-            text-align: center;
-            color: <?php echo esc_attr(get_theme_mod('pokemon_default_text_color', '#111111')); ?>;
-            margin-top: 5px;
         }
 
         .skip-link {
@@ -48,16 +33,12 @@
             font-weight: bold;
             transition: top 0.3s;
         }
-
-        .skip-link:focus {
-            top: 10px;
-        }
+        .skip-link:focus { top: 10px; }
 
         header.frame-container {
             display: flex;
             justify-content: center;
             width: 100%;
-            box-sizing: border-box;
         }
 
         .header-inner {
@@ -69,11 +50,6 @@
             max-width: 1600px;
             margin: 0 auto;
             padding: 0 20px;
-            box-sizing: border-box;
-        }
-
-        .site-branding {
-            text-align: center;
         }
 
         .navbar-ul {
@@ -86,12 +62,6 @@
             align-items: center;
         }
 
-        .navbar-ul li {
-            position: relative;
-            padding-left: 18px;
-        }
-
-        /* Punteado inicial */
         .navbar-ul li::before {
             content: "▶";
             position: absolute;
@@ -100,30 +70,15 @@
             font-size: 0.9rem;
         }
 
-        /* Enlaces NavBar */
         .navbar-ul a {
             text-decoration: none;
             color: #111;
             font-weight: bold;
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
-            .header-inner {
-                flex-direction: column;
-                align-items: center;
-                gap: 10px;
-            }
-            .navbar-ul {
-                flex-direction: column;
-                gap: 10px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .header-inner {
-                padding: 0 10px;
-            }
+            .header-inner { flex-direction: column; align-items: center; gap: 10px; }
+            .navbar-ul { flex-direction: column; gap: 10px; }
         }
     </style>
 </head>
@@ -135,19 +90,18 @@
     <div class="header-inner">
 
         <div class="site-branding">
-            <?php if (is_front_page() && is_home()) : ?>
-                <h1 id="logo">
-                    <a href="<?php echo esc_url(home_url('/')); ?>" rel="home">
-                        <?php bloginfo('name'); ?>
-                    </a>
-                </h1>
-            <?php else : ?>
-                <p id="logo">
-                    <a href="<?php echo esc_url(home_url('/')); ?>" rel="home">
-                        <?php bloginfo('name'); ?>
-                    </a>
-                </p>
-            <?php endif; ?>
+            <?php 
+            $logo_mode = get_theme_mod('pokemon_logo_display_mode', 'background');
+            if ($logo_mode === 'image' && has_custom_logo()) :
+                the_custom_logo();
+            else :
+                if (is_front_page() && is_home()) : ?>
+                    <h1 id="logo"><a href="<?php echo esc_url(home_url('/')); ?>" rel="home"><?php bloginfo('name'); ?></a></h1>
+                <?php else : ?>
+                    <p id="logo"><a href="<?php echo esc_url(home_url('/')); ?>" rel="home"><?php bloginfo('name'); ?></a></p>
+                <?php endif;
+            endif;
+            ?>
             <p class="site-description"><?php bloginfo('description'); ?></p>
         </div>
 
@@ -166,7 +120,6 @@
                 <?php } ?>
             </ul>
         </nav>
-
     </div>
 </header>
 
