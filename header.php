@@ -7,24 +7,17 @@
 </head>
 
 <body <?php body_class(); ?>>
-
 <a href="#main-content" class="skip-link"><?php esc_html_e('Saltar al contenido principal', 'pokemon-theme'); ?></a>
 
 <header class="frame-container">
     <div class="header-inner">
+
         <div class="site-branding">
-            <?php 
-            $logo_mode = get_theme_mod('pokemon_logo_display_mode', 'background');
-            if ($logo_mode === 'image' && has_custom_logo()) :
-                the_custom_logo();
-            else :
-                if (is_front_page() && is_home()) : ?>
-                    <h1 id="logo"><a href="<?php echo esc_url(home_url('/')); ?>" rel="home"><?php bloginfo('name'); ?></a></h1>
-                <?php else : ?>
-                    <p id="logo"><a href="<?php echo esc_url(home_url('/')); ?>" rel="home"><?php bloginfo('name'); ?></a></p>
-                <?php endif;
-            endif;
-            ?>
+            <h1 id="logo" class="site-title">
+                <a href="<?php echo esc_url(home_url('/')); ?>" rel="home">
+                    <?php bloginfo('name'); ?>
+                </a>
+            </h1>
             <p class="site-description"><?php bloginfo('description'); ?></p>
         </div>
 
