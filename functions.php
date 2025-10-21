@@ -1,163 +1,217 @@
 <?php
-/*
-Theme Name: Pokémerald Theme
-Theme URI: https://wpemerald.webs.nf
-Author: Alejo Fernández
-Version: 2.2.2
-Text Domain: pokemon-theme
-*/
+/**
+ * Funciones principales del tema Pokémerald
+ * Versión 2.2.6
+ */
 
-// ========================
-// SOPORTE BÁSICO DEL TEMA
-// ========================
+if (!defined('ABSPATH')) exit; // Seguridad
+
+/* === SOPORTE DEL TEMA === */
 function pokemon_theme_setup() {
+    add_theme_support('title-tag');
+    add_theme_support('post-thumbnails');
+
     add_theme_support('custom-logo', array(
-        'height'      => 100,
-        'width'       => 400,
+        'height'      => 85,
+        'width'       => 190,
         'flex-height' => true,
         'flex-width'  => true,
-        'header-text' => array('site-title', 'site-description'),
     ));
-    add_theme_support('title-tag');
-    add_theme_support('custom-background');
+
+    add_theme_support('custom-background', array(
+        'default-color' => '#f8f8f8',
+    ));
+
+    add_theme_support('customize-selective-refresh-widgets');
 
     register_nav_menus(array(
-        'header-menu' => __('Menú del Header', 'pokemon-theme'),
-        'footer-menu' => __('Menú del Footer', 'pokemon-theme'),
+        'header-menu' => __('Menú principal', 'pokemon-theme'),
     ));
 }
 add_action('after_setup_theme', 'pokemon_theme_setup');
 
-// ========================
-// WIDGETS
-// ========================
+
+/* === WIDGETS === */
 function pokemon_register_widgets() {
     register_sidebar(array(
-        'name'          => __('Footer Widget Area', 'pokemon-theme'),
+        'name'          => __('Área de widgets del footer', 'pokemon-theme'),
         'id'            => 'footer-widget-area',
-        'before_widget' => '<div class="footer-widget">',
+        'description'   => __('Widgets que aparecerán en el pie de página.', 'pokemon-theme'),
+        'before_widget' => '<div class="widget frame-container">',
         'after_widget'  => '</div>',
-        'before_title'  => '<h4 class="footer-widget-title">',
-        'after_title'   => '</h4>',
-    ));
-    register_sidebar(array(
-        'name'          => __('Right Sidebar', 'pokemon-theme'),
-        'id'            => 'right-sidebar',
-        'before_widget' => '<div class="widget %2$s">',
-        'after_widget'  => '</div>',
-        'before_title'  => '<h4 class="widget-title">',
-        'after_title'   => '</h4>',
+        'before_title'  => '<h3 class="widget-title">',
+        'after_title'   => '</h3>',
     ));
 }
 add_action('widgets_init', 'pokemon_register_widgets');
 
-// ========================
-// SCRIPTS Y ESTILOS
-// ========================
+
+/* === ENCOLAR ESTILOS Y SCRIPTS === */
 function pokemon_theme_scripts() {
-    wp_enqueue_style('pokemon-style', get_stylesheet_uri());
-
-    wp_register_script(
-        'pokemon-frame',
-        get_template_directory_uri() . '/js/frame.js',
-        array(),
-        '2.2',
-        true
-    );
-
-    wp_localize_script('pokemon-frame', 'pokemonTheme', array(
-        'templateUrl'   => get_template_directory_uri(),
-        'defaultFrame'  => get_theme_mod('pokemon_default_frame', 1),
-        'accessibility' => get_theme_mod('pokemon_accessibility_mode', false)
-    ));
-
-    wp_enqueue_script('pokemon-frame');
+    wp_enqueue_style('pokemon-style', get_stylesheet_uri(), array(), '2.2.6');
+    wp_enqueue_script('pokemon-scripts', get_template_directory_uri() . '/js/pokemon.js', array('jquery'), '2.2.6', true);
 }
 add_action('wp_enqueue_scripts', 'pokemon_theme_scripts');
 
-// ========================
-// SANITIZACIÓN
-// ========================
-function sanitize_frame_choice($input) {
-    $input = absint($input);
-    return ($input >= 1 && $input <= 10) ? $input : 1;
+
+/* === FUENTE PERSONALIZADA (Pokémon Emerald Regular) === */
+function pokemon_enqueue_fonts() {
+    $font_path = get_template_directory_uri() . '/res/pokemon-emerald-webfont/';
+    $custom_css = "
+        @font-face {
+            font-family: 'pokemon_emeraldregular';
+            src: url('{$font_path}pokemon_emeraldregular.eot');
+            src: url('{$font_path}pokemon_emeraldregular.eot?#iefix') format('embedded-opentype'),
+                 url('{$font_path}pokemon_emeraldregular.woff2') format('woff2'),
+                 url('{$font_path}pokemon_emeraldregular.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+        body {
+            font-family: 'pokemon_emeraldregular', sans-serif;
+        }
+    ";
+    wp_add_inline_style('pokemon-style', $custom_css);
 }
+add_action('wp_enqueue_scripts', 'pokemon_enqueue_fonts');
+
 
 // ========================
-// CUSTOMIZER
+// PERSONALIZADOR (CUSTOMIZER)
 // ========================
 function pokemon_customize_register($wp_customize) {
 
-    $wp_customize->add_setting('pokemon_default_frame', array(
-        'default'           => 1,
-        'sanitize_callback' => 'sanitize_frame_choice',
-    ));
-    $wp_customize->add_control('pokemon_default_frame', array(
-        'label'    => __('Marco por defecto', 'pokemon-theme'),
-        'section'  => 'title_tagline',
-        'type'     => 'select',
-        'choices'  => array_combine(range(1, 10), array_map(fn($i) => "Marco $i", range(1, 10))),
+    // Sección: Apariencia general
+    $wp_customize->add_section('pokemon_general_section', array(
+        'title'       => __('Apariencia general', 'pokemon-theme'),
+        'priority'    => 30,
+        'description' => __('Configura colores, fuente, marco y accesibilidad.', 'pokemon-theme'),
     ));
 
-    $wp_customize->add_setting('pokemon_default_font', array(
+    // Fondo del sitio
+    $wp_customize->add_setting('pokemon_bg_color', array(
+        'default'           => '#f8f8f8',
+        'transport'         => 'refresh',
+        'sanitize_callback' => 'sanitize_hex_color',
+    ));
+    $wp_customize->add_control(new WP_Customize_Color_Control($wp_customize, 'pokemon_bg_color_control', array(
+        'label'    => __('Color de fondo del sitio', 'pokemon-theme'),
+        'section'  => 'pokemon_general_section',
+        'settings' => 'pokemon_bg_color',
+    )));
+
+    // Fondo del footer
+    $wp_customize->add_setting('pokemon_footer_bg', array(
+        'default'           => '#f8f8f8',
+        'transport'         => 'refresh',
+        'sanitize_callback' => 'sanitize_hex_color',
+    ));
+    $wp_customize->add_control(new WP_Customize_Color_Control($wp_customize, 'pokemon_footer_bg_control', array(
+        'label'    => __('Color de fondo del footer (si no hay imagen)', 'pokemon-theme'),
+        'section'  => 'pokemon_general_section',
+        'settings' => 'pokemon_footer_bg',
+    )));
+
+    // Tipografía
+    $wp_customize->add_setting('pokemon_font_family', array(
         'default'           => "'pokemon_emeraldregular', sans-serif",
+        'transport'         => 'refresh',
         'sanitize_callback' => 'sanitize_text_field',
     ));
-    $wp_customize->add_control('pokemon_default_font_control', array(
-        'label'    => __('Tipografía por defecto', 'pokemon-theme'),
-        'section'  => 'title_tagline',
+    $wp_customize->add_control('pokemon_font_family_control', array(
+        'label'    => __('Tipografía del sitio', 'pokemon-theme'),
+        'section'  => 'pokemon_general_section',
+        'settings' => 'pokemon_font_family',
         'type'     => 'select',
         'choices'  => array(
             "'pokemon_emeraldregular', sans-serif" => 'Pokémon Emerald',
-            "Arial, sans-serif"                    => 'Arial',
-            "Georgia, serif"                       => 'Georgia',
-            "Courier New, monospace"               => 'Courier New',
+            'Arial, sans-serif' => 'Arial',
+            'Georgia, serif' => 'Georgia',
+            '"Courier New", monospace' => 'Courier New',
         ),
     ));
 
-    $wp_customize->add_setting('pokemon_bg_color', array(
-        'default'           => '#f8f8f8',
-        'sanitize_callback' => 'sanitize_hex_color',
+    // Marco
+    $wp_customize->add_setting('pokemon_frame_style', array(
+        'default'           => 1,
         'transport'         => 'refresh',
+        'sanitize_callback' => 'absint',
     ));
-    $wp_customize->add_control(new WP_Customize_Color_Control(
-        $wp_customize,
-        'pokemon_bg_color_control',
-        array(
-            'label'    => __('Color de Fondo', 'pokemon-theme'),
-            'section'  => 'colors',
-            'settings' => 'pokemon_bg_color',
-        )
+    $wp_customize->add_control('pokemon_frame_style_control', array(
+        'label'    => __('Marco decorativo', 'pokemon-theme'),
+        'section'  => 'pokemon_general_section',
+        'settings' => 'pokemon_frame_style',
+        'type'     => 'select',
+        'choices'  => array_combine(range(1,10), array_map(fn($i) => "Marco $i", range(1,10))),
     ));
 
+    // Modo accesibilidad
     $wp_customize->add_setting('pokemon_accessibility_mode', array(
         'default'           => false,
+        'transport'         => 'refresh',
         'sanitize_callback' => 'rest_sanitize_boolean',
     ));
-    $wp_customize->add_control('pokemon_accessibility_mode', array(
-        'label'       => __('Activar modo de accesibilidad aumentada', 'pokemon-theme'),
-        'description' => __('Muestra enlaces en azul y rectángulos punteados al enfocar.', 'pokemon-theme'),
-        'section'     => 'title_tagline',
-        'type'        => 'checkbox',
+    $wp_customize->add_control('pokemon_accessibility_mode_control', array(
+        'label'    => __('Activar modo accesibilidad', 'pokemon-theme'),
+        'section'  => 'pokemon_general_section',
+        'settings' => 'pokemon_accessibility_mode',
+        'type'     => 'checkbox',
     ));
 
-    // Logo como background accesible
-    $wp_customize->add_setting('pokemon_logo_as_bg', array(
-        'default'           => false,
-        'sanitize_callback' => 'rest_sanitize_boolean',
+    // Texto y año del footer
+    $wp_customize->add_setting('pokemon_footer_text', array(
+        'default'   => __('Todos los derechos reservados', 'pokemon-theme'),
+        'transport' => 'refresh',
     ));
-    $wp_customize->add_control('pokemon_logo_as_bg', array(
-        'label'       => __('Usar logo como background accesible', 'pokemon-theme'),
-        'description' => __('El logo se verá como imagen pero el nombre del sitio sigue siendo accesible y visible si se quita CSS.'),
+    $wp_customize->add_control('pokemon_footer_text_control', array(
+        'label'    => __('Texto del pie de página', 'pokemon-theme'),
+        'section'  => 'title_tagline',
+        'settings' => 'pokemon_footer_text',
+        'type'     => 'text',
+    ));
+
+    $wp_customize->add_setting('pokemon_footer_start_year', array(
+        'default'   => '',
+        'transport' => 'refresh',
+    ));
+    $wp_customize->add_control('pokemon_footer_start_year_control', array(
+        'label'    => __('Año inicial del pie de página', 'pokemon-theme'),
+        'section'  => 'title_tagline',
+        'settings' => 'pokemon_footer_start_year',
+        'type'     => 'number',
+    ));
+
+    // Logo como background
+    $wp_customize->add_setting('pokemon_logo_as_bg', array(
+        'default'   => false,
+        'transport' => 'refresh',
+    ));
+    $wp_customize->add_control('pokemon_logo_as_bg_control', array(
+        'label'       => __('Usar logo como fondo accesible', 'pokemon-theme'),
+        'description' => __('Si se activa, el logo se mostrará como background del título del sitio manteniendo texto accesible.'),
         'section'     => 'title_tagline',
+        'settings'    => 'pokemon_logo_as_bg',
         'type'        => 'checkbox',
     ));
 }
 add_action('customize_register', 'pokemon_customize_register');
 
-// ========================
-// FUNCIÓN LOGO
-// ========================
+/* === COLOR DEL FOOTER (SI NO HAY IMAGEN DE FONDO) === */
+function pokemon_footer_inline_style() {
+    $footer_bg_color = get_theme_mod('pokemon_footer_bg_color', '#f8f8f8');
+    $background_image = get_background_image();
+
+    if (!$background_image) {
+        echo "<style>footer.frame-container { background-color: " . esc_attr($footer_bg_color) . "; }</style>";
+    }
+}
+add_action('wp_head', 'pokemon_footer_inline_style');
+
+
+/* ========================
+   FUNCIÓN LOGO
+   ======================== */
 function pokemon_the_logo() {
     $logo_id   = get_theme_mod('custom_logo');
     $logo_url  = wp_get_attachment_image_url($logo_id, 'full');
@@ -173,13 +227,17 @@ function pokemon_the_logo() {
 }
 
 // ========================
-// CSS DINÁMICO
+// ESTILOS DINÁMICOS EN HEAD
 // ========================
-function pokemon_dynamic_css() {
-    $bg_color   = get_theme_mod('pokemon_bg_color', '#f8f8f8');
-    $font       = get_theme_mod('pokemon_default_font', "'pokemon_emeraldregular', sans-serif");
-    $frame      = absint(get_theme_mod('pokemon_default_frame', 1));
-    $accessible = get_theme_mod('pokemon_accessibility_mode', false);
+function pokemon_dynamic_styles() {
+    // Valores del personalizador (o defaults si no hay)
+    $bg_color        = get_theme_mod('pokemon_bg_color', '#f8f8f8');
+    $footer_bg       = get_theme_mod('pokemon_footer_bg', '#f8f8f8');
+    $font            = get_theme_mod('pokemon_font_family', "'pokemon_emeraldregular', sans-serif");
+    $frame           = get_theme_mod('pokemon_frame_style', 1);
+    $accessible      = get_theme_mod('pokemon_accessibility_mode', false);
+    $background_image = get_background_image();
+
     ?>
     <style>
         body {
@@ -188,25 +246,41 @@ function pokemon_dynamic_css() {
         }
 
         .frame-container {
-            border-image-source: url('<?php echo get_template_directory_uri(); ?>/img/frame_<?php echo $frame; ?>.png');
+            border-image-source: url('<?php echo esc_url(get_template_directory_uri()); ?>/img/frame_<?php echo intval($frame); ?>.png');
         }
+
+        <?php if (!$background_image): ?>
+        footer.frame-container {
+            background-color: <?php echo esc_attr($footer_bg); ?>;
+        }
+        <?php endif; ?>
 
         <?php if ($accessible): ?>
         a {
             color: #0056b3 !important;
             text-decoration: underline !important;
         }
+
         a:focus,
+        a:hover,
         button:focus,
+        button:hover,
         input:focus,
+        input:hover,
         select:focus,
-        textarea:focus {
-            outline: 2px dotted #005A9C !important;
-            outline-offset: 3px;
-            background-color: transparent !important;
+        select:hover,
+        textarea:focus,
+        textarea:hover {
+            outline: 2px solid #007BFF !important;
+            outline-offset: 2px;
+            background-color: rgba(0, 123, 255, 0.1);
         }
         <?php endif; ?>
     </style>
     <?php
 }
-add_action('wp_head', 'pokemon_dynamic_css');
+add_action('wp_head', 'pokemon_dynamic_styles');
+
+
+?>
+

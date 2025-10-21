@@ -8,44 +8,17 @@
 
 <body <?php body_class(); ?>>
 
-<a href="#main-content" class="skip-link"><?php esc_html_e('Saltar al contenido principal', 'pokemon-theme'); ?></a>
+<a href="#main-content" class="skip-link screen-reader-text"><?php esc_html_e('Saltar al contenido principal', 'pokemon-theme'); ?></a>
 
 <header class="frame-container site-header">
     <div class="header-inner">
 
         <!-- === LOGO / TÍTULO DEL SITIO === -->
         <div class="site-branding">
-            <?php
-            // Obtener ID y URL del logo
-            $logo_id  = get_theme_mod('custom_logo');
-            $logo_url = $logo_id ? wp_get_attachment_image_url($logo_id, 'full') : '';
-            $site_name = get_bloginfo('name');
-            $logo_as_bg = get_theme_mod('pokemon_logo_as_bg', false);
-
-            if ($logo_as_bg && $logo_url) {
-                // Logo como background accesible
-                if (is_front_page() && is_home()) {
-                    echo '<h1 id="logo"><a href="' . esc_url(home_url('/')) . '" style="background-image:url(' . esc_url($logo_url) . ');" aria-label="' . esc_attr($site_name) . '">' . esc_html($site_name) . '</a></h1>';
-                } else {
-                    echo '<p id="logo"><a href="' . esc_url(home_url('/')) . '" style="background-image:url(' . esc_url($logo_url) . ');" aria-label="' . esc_attr($site_name) . '">' . esc_html($site_name) . '</a></p>';
-                }
-            } elseif ($logo_url) {
-                // Logo tradicional con <img>
-                if (is_front_page() && is_home()) {
-                    echo '<h1 id="logo"><a href="' . esc_url(home_url('/')) . '"><img src="' . esc_url($logo_url) . '" alt="' . esc_attr($site_name) . '"></a></h1>';
-                } else {
-                    echo '<p id="logo"><a href="' . esc_url(home_url('/')) . '"><img src="' . esc_url($logo_url) . '" alt="' . esc_attr($site_name) . '"></a></p>';
-                }
-            } else {
-                // Sin logo, solo texto
-                if (is_front_page() && is_home()) {
-                    echo '<h1 id="logo"><a href="' . esc_url(home_url('/')) . '">' . esc_html($site_name) . '</a></h1>';
-                } else {
-                    echo '<p id="logo"><a href="' . esc_url(home_url('/')) . '">' . esc_html($site_name) . '</a></p>';
-                }
-            }
-            ?>
-            <p class="site-description"><?php bloginfo('description'); ?></p>
+            <?php pokemon_the_logo(); ?>
+            <?php if (get_bloginfo('description')) : ?>
+                <p class="site-description"><?php bloginfo('description'); ?></p>
+            <?php endif; ?>
         </div>
 
         <!-- === MENÚ DE NAVEGACIÓN === -->

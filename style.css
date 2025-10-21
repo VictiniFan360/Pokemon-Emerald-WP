@@ -7,6 +7,8 @@ Text Domain: pokemon-theme
 */
 
 /* ======= BASE ======= */
+
+
 body {
     margin: 0;
     padding: 0;
@@ -265,4 +267,11 @@ footer.frame-container {
 
 .search-submit:hover {
     background-color: #e0b804;
+}
+
+footer.frame-container {
+    text-align: center;
+    padding: 10px;
+    font-size: 0.9rem;
+    background: var(--footer-bg, #f8f8f8);
 }
