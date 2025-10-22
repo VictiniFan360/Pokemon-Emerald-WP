@@ -1,7 +1,7 @@
 <?php
 /**
  * Funciones principales del tema Pokémerald
- * Versión 2.2.6
+ * Versión 2.2.7
  */
 
 if (!defined('ABSPATH')) exit; // Seguridad
@@ -10,6 +10,7 @@ if (!defined('ABSPATH')) exit; // Seguridad
 function pokemon_theme_setup() {
     add_theme_support('title-tag');
     add_theme_support('post-thumbnails');
+    add_theme_support('comments');
 
     add_theme_support('custom-logo', array(
         'height'      => 85,
@@ -48,8 +49,8 @@ add_action('widgets_init', 'pokemon_register_widgets');
 
 /* === ENCOLAR ESTILOS Y SCRIPTS === */
 function pokemon_theme_scripts() {
-    wp_enqueue_style('pokemon-style', get_stylesheet_uri(), array(), '2.2.6');
-    wp_enqueue_script('pokemon-scripts', get_template_directory_uri() . '/js/pokemon.js', array('jquery'), '2.2.6', true);
+    wp_enqueue_style('pokemon-style', get_stylesheet_uri(), array(), '2.2.7');
+    wp_enqueue_script('pokemon-scripts', get_template_directory_uri() . '/js/pokemon.js', array('jquery'), '2.2.7', true);
 }
 add_action('wp_enqueue_scripts', 'pokemon_theme_scripts');
 
@@ -197,6 +198,7 @@ function pokemon_customize_register($wp_customize) {
 }
 add_action('customize_register', 'pokemon_customize_register');
 
+
 /* === COLOR DEL FOOTER (SI NO HAY IMAGEN DE FONDO) === */
 function pokemon_footer_inline_style() {
     $footer_bg_color = get_theme_mod('pokemon_footer_bg_color', '#f8f8f8');
@@ -209,9 +211,7 @@ function pokemon_footer_inline_style() {
 add_action('wp_head', 'pokemon_footer_inline_style');
 
 
-/* ========================
-   FUNCIÓN LOGO
-   ======================== */
+/* === FUNCIÓN LOGO === */
 function pokemon_the_logo() {
     $logo_id   = get_theme_mod('custom_logo');
     $logo_url  = wp_get_attachment_image_url($logo_id, 'full');
@@ -226,18 +226,15 @@ function pokemon_the_logo() {
     }
 }
 
-// ========================
-// ESTILOS DINÁMICOS EN HEAD
-// ========================
-function pokemon_dynamic_styles() {
-    // Valores del personalizador (o defaults si no hay)
-    $bg_color        = get_theme_mod('pokemon_bg_color', '#f8f8f8');
-    $footer_bg       = get_theme_mod('pokemon_footer_bg', '#f8f8f8');
-    $font            = get_theme_mod('pokemon_font_family', "'pokemon_emeraldregular', sans-serif");
-    $frame           = get_theme_mod('pokemon_frame_style', 1);
-    $accessible      = get_theme_mod('pokemon_accessibility_mode', false);
-    $background_image = get_background_image();
 
+/* === ESTILOS DINÁMICOS EN HEAD === */
+function pokemon_dynamic_styles() {
+    $bg_color         = get_theme_mod('pokemon_bg_color', '#f8f8f8');
+    $footer_bg        = get_theme_mod('pokemon_footer_bg', '#f8f8f8');
+    $font             = get_theme_mod('pokemon_font_family', "'pokemon_emeraldregular', sans-serif");
+    $frame            = get_theme_mod('pokemon_frame_style', 1);
+    $accessible       = get_theme_mod('pokemon_accessibility_mode', false);
+    $background_image = get_background_image();
     ?>
     <style>
         body {
@@ -280,7 +277,6 @@ function pokemon_dynamic_styles() {
     <?php
 }
 add_action('wp_head', 'pokemon_dynamic_styles');
-
 
 ?>
 
