@@ -275,3 +275,48 @@ footer.frame-container {
     font-size: 0.9rem;
     background: var(--footer-bg, #f8f8f8);
 }
+
+.comments-area {
+    margin-top: 30px;
+    padding: 15px;
+    background: rgba(255,255,255,0.8);
+    border: 2px solid #ccc;
+    border-radius: 10px;
+}
+
+.comment-list {
+    list-style: none;
+    padding: 0;
+}
+
+.comment-list li {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #f9f9f9;
+}
+
+.comment-form input,
+.comment-form textarea {
+    width: 100%;
+    padding: 8px;
+    margin-top: 6px;
+    border: 1px solid #bbb;
+    border-radius: 6px;
+}
+
+.comment-form input[type="submit"] {
+    width: auto;
+    cursor: pointer;
+    border: none;
+    background: #0088ff;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 6px;
+    transition: 0.2s;
+}
+
+.comment-form input[type="submit"]:hover {
+    background: #006fd6;
+}
